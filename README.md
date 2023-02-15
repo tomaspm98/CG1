@@ -1,10 +1,10 @@
 # CG 2022/2023
 
-## Group T0xG0y
+## Group T03G06
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+| Tomás Maciel         | 202006845 | up202006845@fe.up.pt                |
+| Marcelo Apolinário         | 201603903 | up201603903@fe.up.pt                |
 
 ----
 
