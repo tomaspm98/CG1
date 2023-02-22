@@ -13,6 +13,6 @@
 - TODO
 
 ### Exercise 3
-- TODO
+- 
 
 ![Screenshot 1](screenshots/cg-t03g06-tp2-1.png)
