@@ -10,9 +10,13 @@
 - Checking the "CFG.js" file in the lib folder revealed that the class *CFGobject* keeps a reference to the scene it's created in, which facilitated the implementation of the *MyTangram* class.
 
 ### Exercise 2
-- TODO
+- The part of doing the cube was pretty simple because it was just working with vertices and indexes like we did in the first class
+- After that connecting the cube to the tangram figure in our case was easy and we just needed a translation
+- To rotate all the tangram figure with the cube as base, we did a rotation and a translation with the tangram figure as only one figure to put it in the right place. 
 
 ### Exercise 3
 - 
 
 ![Screenshot 1](screenshots/cg-t03g06-tp2-1.png)
+
+![Screenshot 2](screenshots/cg-t03g06-tp2-2.png)
