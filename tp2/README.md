@@ -15,8 +15,18 @@
 - To rotate all the tangram figure with the cube as base, we did a rotation and a translation with the tangram figure as only one figure to put it in the right place. 
 
 ### Exercise 3
-- 
+- It's possible to draw the same object several times in different places, effectively being able to "copy" the object
+- The side of the cube drawn from the *MyQuad* object displays different brightness from the ones of the cube drawn from the *MyUnitCube* object, particularly the top side.
 
-![Screenshot 1](screenshots/cg-t03g06-tp2-1.png)
+## Screenshots
+| ![Screenshot 1](screenshots/cg-t03g06-tp2-1.png) |
+|:--:|
+| *Fig. 1 - Side by side comparison of the original tangram and the drawn tangram.* |
 
-![Screenshot 2](screenshots/cg-t03g06-tp2-2.png)
+| ![Screenshot 2](screenshots/cg-t03g06-tp2-2.png) |
+|:--:|
+| *Fig. 2 - Side by side screenshots of the tangram and the cube from 'MyUnitCube' class.* |
+
+| ![Screenshot 3](screenshots/cg-t03g06-tp2-3.png) |
+|:--:|
+| *Fig. 3 - Side by side screenshots of the tangram and the cube from 'MyUnitCubeQuad' class.* |

@@ -94,8 +94,6 @@ export class MyScene extends CGFscene {
     this.multMatrix(sca);
 
     // ---- BEGIN Primitive drawing section
-    //this.tangram.display()
-    this.unitCubeQuad.display();
     this.translate(Math.sqrt(2)/2,0,-4.95);
     this.rotate(Math.PI/2,1,0,0);
     this.tangram.display();
@@ -103,7 +101,8 @@ export class MyScene extends CGFscene {
 
 
     this.translate(0,0,-0.51);//vermelho x verde y azul x
-    this.cube.display();
+    this.unitCubeQuad.display();
+    //this.cube.display();
     // ---- END Primitive drawing section
   }
 }
