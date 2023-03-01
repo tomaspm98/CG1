@@ -58,6 +58,34 @@ export class MyTangram extends CGFobject {
         this.redMaterial.setDiffuse(1.0, 0.11, 0.11, 1.0);
         this.redMaterial.setSpecular(0.8, 0.8, 0.8, 1.0);
         this.redMaterial.setShininess(10);
+
+        // Green material (no ambient, high specular)
+        this.greenMaterial=new CGFappearance(this.scene);
+        this.greenMaterial.setAmbient(0,0,0,1.0);
+        this.greenMaterial.setDiffuse(0.0, 1.0, 0.0, 1.0);
+        this.greenMaterial.setSpecular(0.8, 0.8, 0.8, 1.0);
+        this.greenMaterial.setShininess(10);
+
+        // Blue material (no ambient, high specular)
+        this.blueMaterial=new CGFappearance(this.scene);
+        this.blueMaterial.setAmbient(0,0,0,1.0);
+        this.blueMaterial.setDiffuse(0.12, 0.56, 1.0, 1.0);
+        this.blueMaterial.setSpecular(0.8, 0.8, 0.8, 1.0);
+        this.blueMaterial.setShininess(10);
+
+        // Orange material (no ambient, high specular)
+        this.orangeMaterial=new CGFappearance(this.scene);
+        this.orangeMaterial.setAmbient(0,0,0,1.0);
+        this.orangeMaterial.setDiffuse(1.0, 0.65, 0.0, 1.0);
+        this.orangeMaterial.setSpecular(0.8, 0.8, 0.8, 1.0);
+        this.orangeMaterial.setShininess(10);
+
+        // Yellow material (no ambient, high specular)
+        this.yellowMaterial=new CGFappearance(this.scene);
+        this.yellowMaterial.setAmbient(0,0,0,1.0);
+        this.yellowMaterial.setDiffuse(1.0, 1.0, 0.0, 1.0);
+        this.yellowMaterial.setSpecular(0.8, 0.8, 0.8, 1.0);
+        this.yellowMaterial.setShininess(10);
     } 
 
     updateBuffers() {
@@ -73,6 +101,8 @@ export class MyTangram extends CGFobject {
     }
 
     display() {
+        //drawing the green diamond
+        this.greenMaterial.apply();
         this.scene.pushMatrix();
 
         var matrixRotate = [
@@ -96,6 +126,7 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix();
       
         // Drawing the blue triangle
+        this.blueMaterial.apply();
         this.scene.pushMatrix();
       
         this.scene.translate(0, Math.sqrt(2)/2, 0);
@@ -107,6 +138,7 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix();
       
         // Drawing the orange triangle
+        this.orangeMaterial.apply();
         this.scene.pushMatrix();
       
         this.scene.translate(0, 3*Math.sqrt(2)-Math.sqrt(2)/2, 0);
@@ -118,6 +150,7 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix();
       
         // Drawing the parallelogram
+        this.yellowMaterial.apply();
         this.scene.pushMatrix();
       
         this.scene.translate(0, 0.5, 0);
