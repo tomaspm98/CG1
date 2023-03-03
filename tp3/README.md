@@ -11,3 +11,8 @@ a few pieces at a time with the light shining on it. To see the other pieces, th
 | ![Screenshot 1](screenshots/cg-t03g06-tp3-1.png) |
 |:--:|
 | *Fig. 1 - Unit cube with the wood material applied.* |
+
+
+| ![Screenshot 2](screenshots/cg-t03g06-tp3-2.png) |
+|:--:|
+| *Fig. 2 - Tangram figure with respective colors and diamond with custom material.* |
