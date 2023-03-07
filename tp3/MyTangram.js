@@ -4,7 +4,7 @@ import { MyParallelogram } from "./MyParallelogram.js";
 import { MyTriangle } from "./MyTriangle.js";
 import { MyTriangleBig } from "./MyTriangleBig.js";
 import { MyTriangleSmall } from "./MyTriangleSmall.js";
-import { MyScene } from "./MyScene.js"
+
 /**
  * MyTangram
  * @constructor
@@ -104,6 +104,7 @@ export class MyTangram extends CGFobject {
     display() {
         //drawing the green diamond
         //this.greenMaterial.apply();
+        this.scene.customMaterial.apply();
         this.scene.pushMatrix();
 
         var matrixRotate = [
