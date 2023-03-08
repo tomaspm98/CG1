@@ -17,3 +17,7 @@ a few pieces at a time with the light shining on it. To see the other pieces, th
 | ![Screenshot 2](screenshots/cg-t03g06-tp3-2.png) |
 |:--:|
 | *Fig. 2 - Tangram figure with respective colors and diamond with custom material.* |
+
+| ![Screenshot 3](screenshots/cg-t03g06-tp3-3.png) |
+|:--:|
+| *Fig. 3 - 20 stack prism with its respective normals displayed.* |

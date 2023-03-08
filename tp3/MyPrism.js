@@ -19,52 +19,59 @@ export class MyPrism extends CGFobject {
         this.indices = [];
         this.normals = [];
         
-        var ang = 0;
-        var alphaAng = 2*Math.PI/this.slices;
+        var z = 0;
+        var alphaZ = 1 / this.stacks;
 
-        for(var i = 0; i < this.slices; i++) {
-            var sa = Math.sin(ang);
-            var saa = Math.sin(ang+alphaAng);
-            var ca = Math.cos(ang);
-            var caa = Math.cos(ang+alphaAng);
-
-            this.vertices.push(ca, sa, 0);
-            this.vertices.push(caa, saa, 0);
-            this.vertices.push(caa, saa, 1);
-            this.vertices.push(ca, sa, 1);
+        for(var j = 0; j < this.stacks; j++) {
+            var ang = 0;
+            var alphaAng = 2*Math.PI/this.slices;
             
-            var midpoint = [
-                (caa+ca)/2, 
-                (saa+sa)/2,
-                0,
-            ];
+            for(var i = 0; i < this.slices; i++) {
+                var sa = Math.sin(ang);
+                var saa = Math.sin(ang+alphaAng);
+                var ca = Math.cos(ang);
+                var caa = Math.cos(ang+alphaAng);
 
-            var normal = [
-                midpoint[0],
-                midpoint[1],
-                midpoint[2]
-            ];
+                this.vertices.push(ca, sa, z);
+                this.vertices.push(caa, saa, z);
+                this.vertices.push(caa, saa, z+alphaZ);
+                this.vertices.push(ca, sa, z+alphaZ);
+                
+                var midpoint = [
+                    (caa+ca)/2, 
+                    (saa+sa)/2,
+                    0,
+                ];
 
-            var nsize=Math.sqrt(
-                normal[0]*normal[0]+
-                normal[1]*normal[1]+
-                normal[2]*normal[2]
-            );
-            normal[0]/=nsize;
-            normal[1]/=nsize;
-            normal[2]/=nsize;
+                var normal = [
+                    midpoint[0],
+                    midpoint[1],
+                    midpoint[2]
+                ];
 
-            this.normals.push(...normal);
-            this.normals.push(...normal);
-            this.normals.push(...normal);
-            this.normals.push(...normal);
-            
-            this.indices.push(
-                4*i, (4*i+1), (4*i+2),
-                4*i, (4*i+2), (4*i+3)
-            );
+                var nsize=Math.sqrt(
+                    normal[0]*normal[0]+
+                    normal[1]*normal[1]+
+                    normal[2]*normal[2]
+                );
+                normal[0]/=nsize;
+                normal[1]/=nsize;
+                normal[2]/=nsize;
 
-            ang+=alphaAng;
+                this.normals.push(...normal);
+                this.normals.push(...normal);
+                this.normals.push(...normal);
+                this.normals.push(...normal);
+                
+                this.indices.push(
+                    4*(i+this.slices*j), (4*(i+this.slices*j)+1), (4*(i+this.slices*j)+2),
+                    4*(i+this.slices*j), (4*(i+this.slices*j)+2), (4*(i+this.slices*j)+3)
+                );
+
+                ang+=alphaAng;
+            }
+
+            z += alphaZ;
         }
         
         this.primitiveType = this.scene.gl.TRIANGLES;
