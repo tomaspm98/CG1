@@ -25,4 +25,4 @@ a few pieces at a time with the light shining on it. To see the other pieces, th
 
 | ![Screenshot 4](screenshots/cg-t03g06-tp3-4.png) |
 |:--:|
-| *Fig. 4 - 20 stack cylinder with its nromals displayed.* |
+| *Fig. 4 - 20 stack cylinder with its normals displayed.* |
