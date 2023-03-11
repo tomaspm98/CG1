@@ -22,3 +22,7 @@ a few pieces at a time with the light shining on it. To see the other pieces, th
 | ![Screenshot 3](screenshots/cg-t03g06-tp3-3.png) |
 |:--:|
 | *Fig. 3 - 20 stack prism with its respective normals displayed.* |
+
+| ![Screenshot 4](screenshots/cg-t03g06-tp3-4.png) |
+|:--:|
+| *Fig. 4 - 20 stack cylinder with its nromals displayed.* |
