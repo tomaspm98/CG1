@@ -59,16 +59,18 @@ export class MyScene extends CGFscene {
         this.selectedTexture = -1;        
         this.wrapS = 0;
         this.wrapT = 0;
+        this.magFilter = 0;
 
         this.textures = [this.texture1, this.texture2, this.texture3];
         this.texCoords = [0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0];
         this.wrappingMethods = ['REPEAT', 'CLAMP_TO_EDGE', 'MIRRORED_REPEAT'];
+        this.magFilters = [this.gl.NEAREST, this.gl.LINEAR];
 
         this.textureIds = { 'Board': 0, 'Floor': 1, 'Window': 2 };
         this.wrappingS = { 'Repeat': 0, 'Clamp to edge': 1, 'Mirrored repeat': 2 };
         this.wrappingT = { 'Repeat': 0, 'Clamp to edge': 1, 'Mirrored repeat': 2 };
-
-      }
+        this.magFiltersIds = { 'Nearest': 0, 'Linear': 1 };
+    }
 
     initLights() {
         this.lights[0].setPosition(5, 2, 5, 1);
@@ -130,8 +132,8 @@ export class MyScene extends CGFscene {
         // Default texture filtering in WebCGF is LINEAR. 
         // Uncomment next line for NEAREST when magnifying, or 
         // add a checkbox in the GUI to alternate in real time
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.magFilters[this.magFilter]);
         
-        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
         if(this.displayQuad)
             this.quad.display();
         

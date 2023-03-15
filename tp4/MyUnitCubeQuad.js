@@ -1,4 +1,4 @@
-import {CGFobject, CGFtexture} from '../lib/CGF.js';
+import {CGFappearance, CGFobject, CGFtexture} from '../lib/CGF.js';
 import { MyQuad } from './MyQuad.js';
 /**
  * MyUnitCubeQuad
@@ -11,7 +11,15 @@ export class MyUnitCubeQuad extends CGFobject {
         super(scene);
 
         this.quad = new MyQuad(scene);
-        //TODO: add material
+
+        // Initializing material
+        this.quadMaterial = new CGFappearance(scene);
+        this.quadMaterial.setAmbient(1.0, 1.0, 1.0, 1);
+        this.quadMaterial.setDiffuse(0.8, 0.8, 0.8, 1);
+        this.quadMaterial.setSpecular(0.2, 0.2, 0.2, 1);
+        this.quadMaterial.setShininess(20.0);
+
+        // Initializing textures
         this.topTex = new CGFtexture(scene, topTex);
         this.frontTex = new CGFtexture(scene, frontTex);
         this.rightTex = new CGFtexture(scene, rightTex);
@@ -19,16 +27,19 @@ export class MyUnitCubeQuad extends CGFobject {
         this.leftTex = new CGFtexture(scene, leftTex);
         this.bottomTex = new CGFtexture(scene, bottomTex);
     }
-
+    
     display() {
+        // Applying the material
+        this.quadMaterial.apply()
+
         // Drawing the back side
         this.scene.pushMatrix();
 
         this.scene.translate(0, 0, -0.5);
         this.scene.scale(-1, 1, 1);
-
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+    
         this.backTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
@@ -40,8 +51,8 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.rotate(Math.PI/2, 1, 0, 0);
         this.scene.scale(-1, 1, 1);
 
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.topTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
@@ -52,8 +63,8 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.translate(0, -0.5, 0);
         this.scene.rotate(Math.PI/2, 1, 0, 0);
 
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.bottomTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
@@ -64,8 +75,8 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.translate(0.5, 0, 0);
         this.scene.rotate(Math.PI/2, 0, 1, 0);
         
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.rightTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
@@ -77,8 +88,8 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.rotate(Math.PI/2, 0, 1, 0);
         this.scene.scale(-1, 1, 1);
 
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.leftTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
@@ -88,8 +99,8 @@ export class MyUnitCubeQuad extends CGFobject {
 
         this.scene.translate(0, 0, 0.5);
 
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.frontTex.bind();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.magFilters[this.scene.magFilter]);
         this.quad.display();
 
         this.scene.popMatrix();
