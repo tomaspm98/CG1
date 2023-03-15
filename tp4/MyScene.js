@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 import { MyQuad } from "./MyQuad.js";
 import { MyTangram } from "./MyTangram.js";
+import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -28,7 +29,12 @@ export class MyScene extends CGFscene {
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.quad = new MyQuad(this);
-        this.tangram = new MyTangram(this);
+        //this.tangram = new MyTangram(this);
+        this.unitCubeQuad = new MyUnitCubeQuad(this, 
+            'images/mineTop.png', 'images/mineSide.png', 
+            'images/mineSide.png', 'images/mineSide.png', 
+            'images/mineSide.png', 'images/mineBottom.png'
+        );
 
         //------ Applied Material
         this.quadMaterial = new CGFappearance(this);
@@ -125,11 +131,12 @@ export class MyScene extends CGFscene {
         // Uncomment next line for NEAREST when magnifying, or 
         // add a checkbox in the GUI to alternate in real time
         
-        // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
         if(this.displayQuad)
             this.quad.display();
-
-        this.tangram.display();
+        
+        this.unitCubeQuad.display();
+        //this.tangram.display();
         // ---- END Primitive drawing section
     }
 }
