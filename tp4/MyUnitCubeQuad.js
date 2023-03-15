@@ -11,7 +11,7 @@ export class MyUnitCubeQuad extends CGFobject {
         super(scene);
 
         this.quad = new MyQuad(scene);
-
+        //TODO: add material
         this.topTex = new CGFtexture(scene, topTex);
         this.frontTex = new CGFtexture(scene, frontTex);
         this.rightTex = new CGFtexture(scene, rightTex);
