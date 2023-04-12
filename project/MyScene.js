@@ -86,13 +86,13 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
-    this.earthMaterial.apply();
-    this.sphere.display();
     this.appearance.apply();
     this.translate(0,-100,0);
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
     this.plane.display();
+    this.earthMaterial.apply();
+    this.sphere.display();
     this.popMatrix();
     
 
