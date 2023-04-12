@@ -45,10 +45,5 @@ export class MySphere extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
-
-    /*initMaterials(){
-        this.earthMaterial = new CGFappearance(this.scene);
-        this.earthMaterial.loadTexture('images/earth.jpg');
-    }*/
     
 }
