@@ -1,6 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
+import { MyPanorama } from "./MyPanorama.js";
 import { MyPlane } from "./MyPlane.js";
-import { MySphere } from "./MySphere.js";
 
 /**
  * MyScene
@@ -27,7 +27,7 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this,30);
-    this.sphere = new MySphere(this,36,18);
+    this.panorama = new MyPanorama(this, new CGFtexture(this, "images/panorama4.jpg"));
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -39,14 +39,6 @@ export class MyScene extends CGFscene {
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-
-    this.earthMaterial = new CGFappearance(this);
-    this.earthMaterial.loadTexture('images/earth.jpg');
-    this.earthMaterial.setAmbient(1.0, 1.0, 1.0, 1);
-    this.earthMaterial.setDiffuse(0.8, 0.8, 0.8, 1);
-    this.earthMaterial.setSpecular(0.2, 0.2, 0.2, 1);
-    this.earthMaterial.setShininess(20.0);
-
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -56,7 +48,7 @@ export class MyScene extends CGFscene {
   }
   initCameras() {
     this.camera = new CGFcamera(
-      1.0,
+      1.2,
       0.1,
       1000,
       vec3.fromValues(50, 10, 15),
@@ -91,11 +83,10 @@ export class MyScene extends CGFscene {
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
     this.plane.display();
-    this.earthMaterial.apply();
-    this.sphere.display();
     this.popMatrix();
-    
 
+    this.panorama.display(this.camera.position);
+    
     // ---- END Primitive drawing section
   }
 }
