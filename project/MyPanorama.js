@@ -23,7 +23,7 @@ export class MyPanorama extends CGFobject {
     display(camera_pos) {
         this.scene.pushMatrix();
         
-        this.scene.translate(camera_pos[0], camera_pos[1], camera_pos[2]);
+        this.scene.translate(camera_pos[0], camera_pos[1] - 50, camera_pos[2]);
         this.scene.scale(200, 200, 200);
         this.scene.rotate(-Math.PI/2.0, 1, 0, 0);
 
