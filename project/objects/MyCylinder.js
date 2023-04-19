@@ -38,7 +38,7 @@ export class MyCylinder extends CGFobject {
     
             }
         }
-        
+        /*
         var currentIndex = this.vertices.length/3;
         this.vertices.push(0, 0, 0);
         this.normals.push(0, 0, -1);
@@ -74,7 +74,7 @@ export class MyCylinder extends CGFobject {
             else
                 this.indices.push(currentIndex, k, currentIndex + 1);
         }
-
+        */
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
