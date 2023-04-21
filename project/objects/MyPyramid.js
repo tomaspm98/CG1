@@ -5,18 +5,23 @@ import {CGFobject} from '../../lib/CGF.js';
  * @param scene - Reference to MyScene object
  * @param slices - number of divisions around the Y axis
  * @param stacks - number of divisions along the Y axis
+ * @param maxS  - Maximum texture coordinate in S
+ * @param maxT  - Maximum texture coordinate in T
 */
 export class MyPyramid extends CGFobject {
-    constructor(scene, slices, stacks) {
+    constructor(scene, slices, stacks, maxS=1, maxT=1) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
+        this.maxS = maxS;
+        this.maxT = maxT;
         this.initBuffers();
     }
     initBuffers() {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
 
         var ang = 0;
         var alphaAng = 2*Math.PI/this.slices;
@@ -57,6 +62,10 @@ export class MyPyramid extends CGFobject {
             this.normals.push(...normal);
 
             this.indices.push(3*i, (3*i+1) , (3*i+2) );
+            
+            this.texCoords.push(0.5, this.maxT);
+            this.texCoords.push(i/this.slices * this.maxS, 0);
+            this.texCoords.push((i+1)/this.slices * this.maxS, 0);
 
             ang+=alphaAng;
         }

@@ -2,16 +2,23 @@ import {CGFobject} from '../lib/CGF.js';
 /**
 * MySpehere
 * @constructor
- * @param scene - Reference to MyScene object
- * @param slices - number of divisions around the Y axis
- * @param stacks - number of divisions along the Y axis
+ * @param scene     - Reference to MyScene object
+ * @param slices    - number of divisions around the Y axis
+ * @param stacks    - number of divisions along the Y axis
+ * @param inverted  - invert the surface of the sphere
+ * @param maxS      - maximum texture coordinate for S
+ * @param maxT      - maximum texture coordinate for T
 */
 export class MySphere extends CGFobject {
-    constructor(scene, slices, stacks, inverted=false) {
+    constructor(scene, slices, stacks, inverted=false, maxS=1, maxT=1, minS=0, minT=0) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
         this.inverted = inverted;
+        this.maxS = maxS;
+        this.maxT = maxT;
+        this.minS = minS;
+        this.minT = minT;
         this.initBuffers();
     }
 
@@ -45,8 +52,8 @@ export class MySphere extends CGFobject {
                         -Math.sin(this.angleStacks)
                     );  
 
-                this.texCoords.push(i/this.slices);
-                this.texCoords.push(j/this.stacks);
+                this.texCoords.push(this.minS + i/this.slices * this.maxS);
+                this.texCoords.push(this.minS + j/this.stacks * this.maxT);
             }
         }
     

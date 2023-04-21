@@ -3,10 +3,14 @@ import {CGFobject} from '../../lib/CGF.js';
  * MyTriangleSmall
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param maxS  - Maximum texture coordinate in S
+ * @param maxT  - Maximum texture coordinate in T
  */
 export class MyTriangleSmall extends CGFobject {
-	constructor(scene) {
+	constructor(scene, maxS=1, maxT=1) {
 		super(scene);
+		this.maxS = maxS;
+		this.maxT = maxT;
 		this.initBuffers();
 	}
 	
@@ -33,6 +37,15 @@ export class MyTriangleSmall extends CGFobject {
 			0, 0, -1,
 			0, 0, -1,
 			0, 0, -1
+		];
+
+		this.texCoords = [
+			0, 0,
+			0, this.maxT,
+			this.maxS, this.maxT,
+			0, 0,
+			0, this.maxT,
+			this.maxS, this.maxT
 		];
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles
