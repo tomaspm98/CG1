@@ -34,8 +34,6 @@ export class MyScene extends CGFscene {
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
-    this.timeLastFrame = 0;
-  
 
     this.enableTextures(true);
 
@@ -43,11 +41,6 @@ export class MyScene extends CGFscene {
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-
-    this.setUpdatePeriod(20);
-
-    //this.velocity = 1;
-    //this.bird.updateVelocity(this.velocity);
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -71,16 +64,6 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
-
-  update(t){
-    var deltaT = (t - this.timeLastFrame)/200;
-    this.bird.animation1(deltaT);
-    //this.bird.animation2(deltaT,this.bird.velocity);
-    this.bird.animation2(deltaT);
-    this.timeLastFrame = t;
-    this.checkKeys();
-}
-
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -108,28 +91,5 @@ export class MyScene extends CGFscene {
     this.panorama.display(this.camera.position);
     this.bird.display();
     // ---- END Primitive drawing section
-  }
-
-  checkKeys(){
-    var text = "Keys pressed: ";
-    var keysPressed=false;
-
-    if (this.gui.isKeyPressed("KeyW")){
-      text+=" W ";
-      this.bird.velocity += 0.1;
-      this.bird.updateVelocity(this.velocity);
-      keysPressed = true;
-    }
-
-    if (this.gui.isKeyPressed("KeyS")){
-      text+= " S ";
-      this.bird.velocity -= 0.1;
-      if (this.bird.velocity < 0) this.bird.velocity = 0;
-      this.bird.updateVelocity(this.velocity);
-      keysPressed=true;
-    }
-
-    if (keysPressed)
-      console.log(text);
   }
 }
