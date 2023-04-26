@@ -29,7 +29,7 @@ export class MyBird extends CGFobject {
 
         this.maxWingAngle = Math.PI/6;
         this.dWingAngle = 0;
-        this.wingAngleScale = 1;
+
         this.speed = 0;
     }
 
@@ -47,25 +47,28 @@ export class MyBird extends CGFobject {
         // Divide 't' by 1000 to convert into seconds.
         // Multiply by 2*Math.PI to get a period of 1 second.
         this.dy = this.yScale * Math.sin((t / 1000) * 2*Math.PI);
-        this.dWingAngle = 
-            this.wingAngleScale * Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
+        this.dWingAngle = -Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
     }
 
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(0, this.y + this.dy, 0);
-        this.head.display();
-        this.body.display();
+        //this.scene.translate(0, this.y + this.dy, 0);
+        //this.head.display();
+        //this.body.display();
 
         this.scene.pushMatrix();
-        this.scene.translate(0.2, -0.3, -0.6);
+        //this.scene.translate(0.2, -0.3, -0.6);
+        this.scene.translate(0.2, 0.0, 0.0);
         this.scene.rotate(this.maxWingAngle * this.dWingAngle, 0, 0, 1);
+        this.scene.translate(-0.2, 0.0, 0.0);
         this.leftWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(-0.2, -0.3, -0.6);
+        //this.scene.translate(-0.2, -0.3, -0.6);
+        this.scene.translate(-0.2, 0.0, 0.0);
         this.scene.rotate(-(this.maxWingAngle * this.dWingAngle), 0, 0, 1);
+        this.scene.translate(0.2, 0.0, 0.0);
         this.rightWing.display();
         this.scene.popMatrix();
 
@@ -248,13 +251,16 @@ class BirdLeg extends CGFobject {
 class BirdWing extends CGFobject {
     constructor(scene, side) {
         super(scene);
+        this.side = side;
         this.initParts();
         this.initMaterials();
-        this.side = side;
     }
     
     initParts() {
-        this.innerWing = new MyQuad(this.scene, 1, 0.5);
+        if(this.side === "right")
+            this.innerWing = new MyQuad(this.scene, 0, 0, 1, 0.5);
+        else
+            this.innerWing = new MyQuad(this.scene, 0, 0, 1, 0.5);
         this.outerWing = new MyTriangle(this.scene, 0.5, 0.7);
     }
     initMaterials() {
@@ -267,20 +273,25 @@ class BirdWing extends CGFobject {
     display() {
         this.wingMaterial.apply();
         this.scene.pushMatrix();
-        if(this.side === "right") this.scene.scale(-1, 1, 1);
+        if(this.side === "right"){
+            this.scene.rotate(Math.PI, 0, 1, 0);
+        }
         this.scene.translate(0.35, 0, 0);
+        if(this.side === "right"){
+            this.scene.rotate(-Math.PI, 0, 0, 1);
+        }
         this.scene.scale(0.7, 1.0, 0.6);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
         this.innerWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        if(this.side === "right") this.scene.scale(-1, 1, 1);
-        this.scene.scale(1, 1, -1);
+        if(this.side === "right") this.scene.rotate(Math.PI, 0, 0, 1);
         this.scene.translate(1.05, 0.0, 0.0);
         this.scene.scale(0.35, 1.0, 0.3);
+        this.scene.rotate(-Math.PI/2, 0, 1, 0);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
-        this.outerWing.display();
+        //this.outerWing.display();
         this.scene.popMatrix();
     }
 }
