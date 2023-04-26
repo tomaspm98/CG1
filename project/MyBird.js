@@ -24,9 +24,13 @@ export class MyBird extends CGFobject {
 
     initParams() {
         this.y = 3;
+        this.x=0;
+        this.z=0;
         this.dy = 0;
+        this.orientation = 0;
         this.yScale = 0.15;
-
+        this.scaleFactor = 1;
+        this.speedFactor = 1;
         this.maxWingAngle = Math.PI/6;
         this.dWingAngle = 0;
         this.wingAngleScale = 1;
@@ -48,12 +52,34 @@ export class MyBird extends CGFobject {
         // Multiply by 2*Math.PI to get a period of 1 second.
         this.dy = this.yScale * Math.sin((t / 1000) * 2*Math.PI);
         this.dWingAngle = 
-            this.wingAngleScale * Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
+        this.wingAngleScale * Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
+        this.x = this.x + this.speed*this.scene.speedFactor*Math.sin(this.orientation);
+        this.z = this.z + this.speed* this.scene.speedFactor*Math.cos(this.orientation);   
+
+    }
+
+    turn(v){
+        this.orientation = this.orientation + v;
+        this.orientation = this.orientation % (2*Math.PI);
+    }
+
+    resetBird(){
+        this.speed = 0;
+        this.orientation=0;
+        this.x=0;
+        this.y=3;
+        this.z=0;
+    }
+
+    accelerate(v){
+        this.speed = this.speed + v;
     }
 
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(0, this.y + this.dy, 0);
+        this.scene.translate(this.x, this.y + this.dy, this.z);
+        this.scene.rotate(this.orientation,0,1,0);
+        this.scene.scale(this.scene.scaleFactor,this.scene.scaleFactor,this.scene.scaleFactor)
         this.head.display();
         this.body.display();
 
