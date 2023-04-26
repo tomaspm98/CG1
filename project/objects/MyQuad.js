@@ -7,8 +7,10 @@ import {CGFobject} from '../../lib/CGF.js';
  * @param {int} 	maxT  - Maximum texture coordinate in T
  */
 export class MyQuad extends CGFobject {
-	constructor(scene, maxS=1, maxT=1) {
+	constructor(scene, minS=0, minT=0, maxS=1, maxT=1) {
 		super(scene);
+		this.minS = minS;
+		this.minT = minT;
 		this.maxS = maxS;
 		this.maxT = maxT;
 		this.initBuffers();
@@ -30,8 +32,8 @@ export class MyQuad extends CGFobject {
 		this.indices = [
 			0, 1, 2,
 			1, 3, 2,
-			0, 2, 1,
-			1, 2, 3
+			4, 6, 5,
+			5, 6, 7
 		];
 
 		//Facing Z positive
@@ -57,14 +59,14 @@ export class MyQuad extends CGFobject {
         */
 
 		this.texCoords = [
-			0, 0,
-			this.maxS, 0,
-			0, this.maxT,
+			this.minS, this.minT,
+			this.maxS, this.minT,
+			this.minS, this.maxT,
 			this.maxS, this.maxT,
+			this.minS, this.minT,
+			this.maxS, this.minT,
+			this.minS, this.maxT,
 			this.maxS, this.maxT,
-			this.maxS, 0,
-			0, this.maxT,
-			0, 0
 		];
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
