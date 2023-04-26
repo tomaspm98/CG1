@@ -1,10 +1,11 @@
 import {CGFappearance, CGFobject} from '../lib/CGF.js';
-import { MyDiamond } from './objects/MyDiamond.js';
 import { MySphere } from './MySphere.js';
+import { MyDiamond } from './objects/MyDiamond.js';
 import { MyCylinder } from './objects/MyCylinder.js';
 import { MyPyramid } from './objects/MyPyramid.js';
-import { MyTriangleSmall } from './objects/MyTriangleSmall.js';
 import { MyCone } from './objects/MyCone.js';
+import { MyQuad } from './objects/MyQuad.js';
+import { MyTriangle } from './objects/MyTriangle.js';
 
 //TODO: Add claws (maybe)
 //TODO: Add textures
@@ -17,7 +18,19 @@ import { MyCone } from './objects/MyCone.js';
 export class MyBird extends CGFobject {
     constructor(scene) {
         super(scene);
+        this.initParams();
         this.initParts();
+    }
+
+    initParams() {
+        this.y = 3;
+        this.dy = 0;
+        this.yScale = 0.15;
+
+        this.maxWingAngle = Math.PI/6;
+        this.dWingAngle = 0;
+        this.wingAngleScale = 1;
+        this.speed = 0;
     }
 
     initParts() {
@@ -30,19 +43,29 @@ export class MyBird extends CGFobject {
         this.tail = new BirdTail(this.scene);
     }
 
+    update(t, dt) {
+        // Divide 't' by 1000 to convert into seconds.
+        // Multiply by 2*Math.PI to get a period of 1 second.
+        this.dy = this.yScale * Math.sin((t / 1000) * 2*Math.PI);
+        this.dWingAngle = 
+            this.wingAngleScale * Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
+    }
+
     display() {
+        this.scene.pushMatrix();
+        this.scene.translate(0, this.y + this.dy, 0);
         this.head.display();
         this.body.display();
 
         this.scene.pushMatrix();
-        // transformation to animate wing
-        //this.scene.rotate(Math.PI/6, 0, 0, 1);
+        this.scene.translate(0.2, -0.3, -0.6);
+        this.scene.rotate(this.maxWingAngle * this.dWingAngle, 0, 0, 1);
         this.leftWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        // transformation to animate wing
-        //this.scene.rotate(-Math.PI/6, 0, 0, 1);
+        this.scene.translate(-0.2, -0.3, -0.6);
+        this.scene.rotate(-(this.maxWingAngle * this.dWingAngle), 0, 0, 1);
         this.rightWing.display();
         this.scene.popMatrix();
 
@@ -55,6 +78,7 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
 
         this.tail.display();
+        this.scene.popMatrix();
     }
 }
 
@@ -230,8 +254,8 @@ class BirdWing extends CGFobject {
     }
     
     initParts() {
-        this.innerWing = new MyDiamond(this.scene, 1, 0.5);
-        this.outerWing = new MyTriangleSmall(this.scene, 0.5, 0.7);
+        this.innerWing = new MyQuad(this.scene, 1, 0.5);
+        this.outerWing = new MyTriangle(this.scene, 0.5, 0.7);
     }
     initMaterials() {
         this.wingMaterial = new CGFappearance(this.scene);
@@ -244,20 +268,17 @@ class BirdWing extends CGFobject {
         this.wingMaterial.apply();
         this.scene.pushMatrix();
         if(this.side === "right") this.scene.scale(-1, 1, 1);
-        this.scene.translate(0.4, -0.2, -0.6);
-        this.scene.rotate(Math.PI/6, 0, 0, 1);
-        this.scene.scale(0.45, 1.0, 0.4);
-        this.scene.rotate(Math.PI/4, 0, 1, 0);
+        this.scene.translate(0.35, 0, 0);
+        this.scene.scale(0.7, 1.0, 0.6);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
         this.innerWing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
         if(this.side === "right") this.scene.scale(-1, 1, 1);
-        this.scene.translate(0.95, -0.2, -0.6);
-        this.scene.rotate(-Math.PI/6, 0, 0, 1);
-        this.scene.scale(0.45, 1.0, 0.4);
-        this.scene.rotate(Math.PI/4, 0, 1, 0);
+        this.scene.scale(1, 1, -1);
+        this.scene.translate(1.05, 0.0, 0.0);
+        this.scene.scale(0.35, 1.0, 0.3);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
         this.outerWing.display();
         this.scene.popMatrix();
