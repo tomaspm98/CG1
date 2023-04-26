@@ -52,7 +52,7 @@ export class MyBird extends CGFobject {
         // Multiply by 2*Math.PI to get a period of 1 second.
         this.dy = this.yScale * Math.sin((t / 1000) * 2*Math.PI);
         this.dWingAngle = 
-        this.wingAngleScale * Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
+        -Math.sin((1 + this.speed) * (t / 1000) * 2*Math.PI);
         this.x = this.x + this.speed*this.scene.speedFactor*Math.sin(this.orientation);
         this.z = this.z + this.speed* this.scene.speedFactor*Math.cos(this.orientation);   
 
