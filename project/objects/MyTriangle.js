@@ -3,12 +3,15 @@ import {CGFobject} from '../../lib/CGF.js';
  * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param minS  - Mininum texture
  * @param maxS  - Maximum texture coordinate in S
  * @param maxT  - Maximum texture coordinate in T
  */
 export class MyTriangle extends CGFobject {
-	constructor(scene, maxS=1, maxT=1) {
+	constructor(scene, minS=0, minT=0, maxS=1, maxT=1) {
 		super(scene);
+		this.minS = minS;
+		this.minT = minT;
 		this.maxS = maxS;
 		this.maxT = maxT;
 		this.initBuffers();
@@ -40,11 +43,11 @@ export class MyTriangle extends CGFobject {
 		];
 
 		this.texCoords = [
-			0, 0,
-			0, this.maxT,
+			this.minS, this.minT,
+			this.minS, this.maxT,
 			this.maxS, this.maxT,
-			0, 0,
-			0, this.maxT,
+			this.minS, this.minT,
+			this.minS, this.maxT,
 			this.maxS, this.maxT
 		];
 

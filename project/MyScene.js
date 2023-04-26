@@ -31,10 +31,12 @@ export class MyScene extends CGFscene {
     this.panorama = new MyPanorama(this, new CGFtexture(this, "images/panorama4.jpg"));
     this.bird = new MyBird(this);
 
+    //Bird displacement variables
+    this.aceleration = 0.1;
+    this.theta = Math.PI/32;
+
     //Objects connected to MyInterface
     this.displayAxis = true;
-    this.scaleFactor = 1;
-    this.speedFactor = 1;
 
     this.enableTextures(true);
 
@@ -68,11 +70,51 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
+  checkKeys(){
+    var text = "Keys pressed: ";
+    var keysPressed=false;
+
+    if (this.gui.isKeyPressed("KeyW")){
+      text += " W ";
+      this.bird.accelerate(this.aceleration);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyS")){
+      text += " S ";
+      this.bird.accelerate(-this.aceleration);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyA")){
+      text += " A ";
+      this.bird.turn(this.theta);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyD")){
+      text += " D ";
+      this.bird.turn(-this.theta);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyR")){
+      text += " R ";
+      this.bird.resetBird();
+      keysPressed = true;
+    }
+
+    if (keysPressed)
+      console.log(text);
+  }
+
   update(t) {
+    this.checkKeys();
+
     var dt = t - this.timePrevFrame;
     this.bird.update(t, dt);
+
     this.timePrevFrame = t;
-    this.checkKeys();
   }
   display() {
     // ---- BEGIN Background, camera and axis setup
@@ -102,47 +144,4 @@ export class MyScene extends CGFscene {
     this.bird.display();
     // ---- END Primitive drawing section
   }
-
-  checkKeys(){
-    var text = "Keys pressed: ";
-    var keysPressed=false;
-
-    if (this.gui.isKeyPressed("KeyW")){
-      text+=" W ";
-      this.bird.accelerate(0.1);
-      keysPressed = true;
-    }
-
-    if (this.gui.isKeyPressed("KeyS")){
-      text+= " S ";
-      if (this.bird.speed > 0.1){
-        this.bird.accelerate(-0.1);
-      }
-      else if (this.bird.speed <= 0){
-        this.bird.speed = 0;
-      }
-      keysPressed=true;
-    }
-
-    if (this.gui.isKeyPressed("KeyA")){
-      text+= " A ";
-      this.bird.turn(Math.PI/16);
-      keysPressed=true;
-    }
-
-    if (this.gui.isKeyPressed("KeyD")){
-      text+= " D ";
-      this.bird.turn(-Math.PI/16);
-      keysPressed=true;
-    }
-
-    if (this.gui.isKeyPressed("KeyR")){
-      text+= " R ";
-      this.bird.resetBird();
-      keysPressed=true;
-    }
-    if (keysPressed)
-      console.log(text);
-  }
-
 }

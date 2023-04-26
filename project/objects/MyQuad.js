@@ -3,6 +3,8 @@ import {CGFobject} from '../../lib/CGF.js';
  * MyQuad
  * @constructor
  * @param {MyScene} scene - Reference to MyScene object
+ * @param {int}		minS  - Mininum texture coordinate in S
+ * @param {int}		minT  - Mininum texture coordinate in T
  * @param {int}		maxS  - Maximum texture coordinate in S
  * @param {int} 	maxT  - Maximum texture coordinate in T
  */

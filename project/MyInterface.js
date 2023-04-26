@@ -19,11 +19,11 @@ export class MyInterface extends CGFinterface {
 
         //Checkbox element in GUI
         this.gui.add(this.scene, 'displayAxis').name('Display Axis');
-
-        //Slider element in GUI
-        this.gui.add(this.scene, 'scaleFactor', 0.5, 3).name('Scale Factor');
-
-        this.gui.add(this.scene, 'speedFactor', 0.1, 3).name('Speed Factor');
+        
+        //Folder for bird parameters
+        var birdFolder = this.gui.addFolder('Bird Parameters');
+        birdFolder.add(this.scene.bird, 'scaleFactor', 0.5, 3).name('Scale Factor');
+        birdFolder.add(this.scene.bird, 'speedFactor', 0.1, 3).name('Speed Factor');
 
         this.initKeys();
         
@@ -32,9 +32,7 @@ export class MyInterface extends CGFinterface {
 
     initKeys(){
         this.scene.gui=this;
-
         this.processKeyboard = function(){};
-
         this.activeKeys={};
     }
 
@@ -47,8 +45,7 @@ export class MyInterface extends CGFinterface {
     }
 
     isKeyPressed(keyCode){
-        return this.
-        activeKeys[keyCode] || false;
+        return this.activeKeys[keyCode] || false;
     }
 
 }
