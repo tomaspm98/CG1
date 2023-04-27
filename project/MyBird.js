@@ -24,7 +24,7 @@ export class MyBird extends CGFobject {
 
     initParams() {
         this.x = 0;
-        this.y = 3;
+        this.y = 5;
         this.z = 0;
         this.orientation = 0;
 
@@ -56,9 +56,9 @@ export class MyBird extends CGFobject {
     update(t, dt) {
         // Divide 't' and 'dt' by 1000 to convert into seconds.
         // Multiply by 2*Math.PI to get a period of 1 second.
-        this.dy = this.yScale * Math.sin(this.speedFactor * (t / 1000) * 2*Math.PI);
+        this.dy = this.yScale * Math.sin((t/1000) * 2*Math.PI);
         this.dWingAngle = 
-            -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t / 1000) * 2*Math.PI);
+            -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t/1000) * 2*Math.PI);
         this.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
         this.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);   
 
@@ -69,7 +69,7 @@ export class MyBird extends CGFobject {
     }
 
     turn(v) {
-        this.orientation = (this.orientation + v) % (2*Math.PI);
+        this.orientation = (this.orientation + v * this.speedFactor) % (2*Math.PI);
     }
 
     resetBird() {
@@ -243,14 +243,14 @@ class BirdLeg extends CGFobject {
 
     initParts() {
         this.leg = new MyCylinder(this.scene, 24, 8, 1, 1);
-        this.claw = new MyDiamond(this.scene, 1, 1);
+        this.foot = new MyDiamond(this.scene, 1, 1);
     }
     initMaterials() {
         this.skinMaterial = new CGFappearance(this.scene);
         this.skinMaterial.loadTexture('images/skin.jpg');
         this.skinMaterial.setSpecular(0.0, 0.0, 0.0, 1.0);
-        this.skinMaterial.setDiffuse(1.0, 1.0, 1.0, 1.0);
-        this.skinMaterial.setAmbient(0.0, 0.0, 0.0, 1.0);
+        this.skinMaterial.setDiffuse(0.9, 0.9, 0.9, 1.0);
+        this.skinMaterial.setAmbient(0.1, 0.1, 0.1, 1.0);
 
     }
     display() {
@@ -269,7 +269,7 @@ class BirdLeg extends CGFobject {
         this.scene.translate(0.15, -0.646, -0.946);
         this.scene.rotate(-Math.PI/4, 1, 0, 0);
         this.scene.scale(0.1, 0.12, 1);
-        this.claw.display();
+        this.foot.display();
         this.scene.popMatrix();
     }
 

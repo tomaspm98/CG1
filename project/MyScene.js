@@ -59,8 +59,8 @@ export class MyScene extends CGFscene {
       1.0,
       0.1,
       1000,
-      vec3.fromValues(50, 10, 15),
-      vec3.fromValues(0, 0, 0)
+      vec3.fromValues(5, -90, -5),
+      vec3.fromValues(0, -95, 0)
     );
     this.camera.zoom(50);
   }
@@ -133,15 +133,15 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
-    this.appearance.apply();
     this.translate(0,-100,0);
+    this.bird.display();
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
+    this.appearance.apply();
     this.plane.display();
     this.popMatrix();
 
     this.panorama.display(this.camera.position);
-    this.bird.display();
     // ---- END Primitive drawing section
   }
 }
