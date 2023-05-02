@@ -31,9 +31,12 @@ export class MyScene extends CGFscene {
     this.panorama = new MyPanorama(this, new CGFtexture(this, "images/panorama4.jpg"));
     this.bird = new MyBird(this);
 
+    //Bird displacement variables
+    this.aceleration = 0.1;
+    this.theta = Math.PI/32;
+
     //Objects connected to MyInterface
     this.displayAxis = true;
-    this.scaleFactor = 1;
 
     this.enableTextures(true);
 
@@ -41,6 +44,9 @@ export class MyScene extends CGFscene {
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.timePrevFrame = Date.now();
+    this.setUpdatePeriod(30);
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -53,8 +59,8 @@ export class MyScene extends CGFscene {
       1.0,
       0.1,
       1000,
-      vec3.fromValues(50, 10, 15),
-      vec3.fromValues(0, 0, 0)
+      vec3.fromValues(5, -90, -5),
+      vec3.fromValues(0, -95, 0)
     );
     this.camera.zoom(50);
   }
@@ -63,6 +69,52 @@ export class MyScene extends CGFscene {
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
+  }
+  checkKeys(){
+    var text = "Keys pressed: ";
+    var keysPressed=false;
+
+    if (this.gui.isKeyPressed("KeyW")){
+      text += " W ";
+      this.bird.accelerate(this.aceleration);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyS")){
+      text += " S ";
+      this.bird.accelerate(-this.aceleration);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyA")){
+      text += " A ";
+      this.bird.turn(this.theta);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyD")){
+      text += " D ";
+      this.bird.turn(-this.theta);
+      keysPressed = true;
+    }
+
+    if (this.gui.isKeyPressed("KeyR")){
+      text += " R ";
+      this.bird.resetBird();
+      keysPressed = true;
+    }
+
+    if (keysPressed)
+      console.log(text);
+  }
+
+  update(t) {
+    this.checkKeys();
+
+    var dt = t - this.timePrevFrame;
+    this.bird.update(t, dt);
+
+    this.timePrevFrame = t;
   }
   display() {
     // ---- BEGIN Background, camera and axis setup
@@ -81,15 +133,15 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
-    this.appearance.apply();
     this.translate(0,-100,0);
+    this.bird.display();
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
+    this.appearance.apply();
     this.plane.display();
     this.popMatrix();
 
     this.panorama.display(this.camera.position);
-    this.bird.display();
     // ---- END Primitive drawing section
   }
 }
