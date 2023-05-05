@@ -72,9 +72,9 @@ export class MyBird extends CGFobject {
 
     resetBird() {
         this.x = 0;
-        this.y = 3;
+        this.y = 5;
         this.z = 0;
-        this.orientation=0;
+        this.orientation = 0;
         this.speed = 0;
     }
 
