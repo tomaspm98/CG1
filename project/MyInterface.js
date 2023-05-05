@@ -19,10 +19,33 @@ export class MyInterface extends CGFinterface {
 
         //Checkbox element in GUI
         this.gui.add(this.scene, 'displayAxis').name('Display Axis');
+        
+        //Folder for bird parameters
+        var birdFolder = this.gui.addFolder('Bird Parameters');
+        birdFolder.add(this.scene.bird, 'scaleFactor', 0.5, 3).name('Scale Factor');
+        birdFolder.add(this.scene.bird, 'speedFactor', 0.1, 3).name('Speed Factor');
 
-        //Slider element in GUI
-        this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
-
+        this.initKeys();
+        
         return true;
     }
+
+    initKeys(){
+        this.scene.gui=this;
+        this.processKeyboard = function(){};
+        this.activeKeys={};
+    }
+
+    processKeyDown(event){
+        this.activeKeys[event.code]=true;
+    }
+
+    processKeyUp(event){
+        this.activeKeys[event.code]=false;
+    }
+
+    isKeyPressed(keyCode){
+        return this.activeKeys[keyCode] || false;
+    }
+
 }

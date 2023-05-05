@@ -30,8 +30,8 @@ export class MyDiamond extends CGFobject {
 		this.indices = [
 			0, 1, 2,
 			1, 3, 2,
-			0, 2, 1,
-			1, 2, 3
+			4, 6, 5,
+			5, 6, 7
 		];
 
 		this.normals = [
