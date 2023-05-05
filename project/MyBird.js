@@ -37,7 +37,7 @@ export class MyBird extends CGFobject {
         this.yScale = 0.15;
 
         this.speed = 0;
-        this.maxSpeed = 4;
+        this.maxSpeed = 5;
         this.speedScale = 0.5;
     }
 

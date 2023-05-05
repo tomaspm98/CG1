@@ -29,6 +29,11 @@
 - The bird is free to rotate in 360 degrees, and the speed is capped so that the bird doesn't accelerate forever.
 - The *speedFactor* is used similarly as the bird's speed in the wing flapping animation, working as another multiplicative factor to influence the rate of change of the sinusoidal function.
 
+### Point 4 - Terrain
+- The shaders used to create the terrain were based on the shaders used in [tp5](../tp5/README.md) to create the wave effect on water. They differ in the inclusion of a third texture for the shaders of this project, the altimetry to change the color of the terrain based on its height.
+- In order to align the coordinates of the terrain with its color on the altimetry texture, the blue color component of the corresponding heightmap texture coordinates was inverted (because the altimetry goes from bottom to the top, however the starting point of the texture coordinates is at the top).
+- To get the flat area on both the terrain and on the heightmap, both their images were edited using the website [pixlr](https://pixlr.com/x/).
+
 ## Screenshots
 | ![Screenshot 1](screenshots/project-t03g06-1.gif) |
 |:--:|
@@ -37,3 +42,7 @@
 | ![Screenshot 2](screenshots/project-t03g06-2.png) |
 |:--:|
 | *Fig. 2 - Two view angles of the bird model.* |
+
+| ![Screenshot 3](screenshots/project-t03g06-3.png) |
+|:--:|
+| *Fig. 3 - Two view angles of the scene containing the bird, terrain and background.* |

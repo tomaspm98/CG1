@@ -14,6 +14,8 @@ export class MyScene extends CGFscene {
   init(application) {
     super.init(application);
     
+    this.birdStartPos = vec3.fromValues(40, -58, 50);
+
     this.initCameras();
     this.initLights();
 
@@ -39,6 +41,10 @@ export class MyScene extends CGFscene {
     this.displayAxis = true;
 
     this.enableTextures(true);
+
+    
+    this.timePrevFrame = Date.now();
+    this.setUpdatePeriod(30);
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -51,10 +57,9 @@ export class MyScene extends CGFscene {
       1.0,
       0.1,
       1000,
-      vec3.fromValues(5, -90, -5),
-      vec3.fromValues(0, -95, 0)
+      vec3.fromValues(this.birdStartPos[0] + 5, this.birdStartPos[1], this.birdStartPos[2] + 10),
+      this.birdStartPos
     );
-    this.camera.zoom(50);
   }
   setDefaultAppearance() {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -125,14 +130,19 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
     this.pushMatrix();
     this.translate(0,-100,0);
-    this.bird.display();
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
     this.terrain.display();
     this.popMatrix();
 
     this.setActiveShader(this.defaultShader);
+
     this.panorama.display(this.camera.position);
+
+    this.pushMatrix();
+    this.translate(this.birdStartPos[0], this.birdStartPos[1], this.birdStartPos[2]);
+    this.bird.display();
+    this.popMatrix();
     // ---- END Primitive drawing section
   }
 }

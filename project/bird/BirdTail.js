@@ -15,7 +15,6 @@ export class BirdTail extends CGFobject {
 
     initParts() {
         this.tail = new MyCone(this.scene, 4, 16, Math.PI/2);
-        this.tail.enableNormalViz();
     }
 
     initMaterials() {
