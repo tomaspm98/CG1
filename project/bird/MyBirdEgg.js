@@ -5,17 +5,14 @@ import { MySphere } from "../MySphere.js";
 * MyBirdEgg
 * @constructor
  * @param scene     - Reference to MyScene object
- * @param x         - Egg x coordinate in the scene
- * @param z         - Egg z coordinate in the scene
+ * @param pos       - Initial position
  * @param angles    - Array of angles of rotation along the x, y and z axis respectively
 */
 export class MyBirdEgg extends CGFobject {
-    constructor(scene, x, z, angles) {
+    constructor(scene, pos, angles) {
         super(scene);
-        this.x = x;
-        this.y = -59.5;
-        this.z = z;
-        this.angles = angles
+        this.position = pos;
+        this.angles = angles;
         this.initParts();
         this.initMaterials();
     }
@@ -36,7 +33,7 @@ export class MyBirdEgg extends CGFobject {
         this.eggMaterial.apply();
 
         this.scene.pushMatrix();
-        this.scene.translate(this.x, this.y, this.z);
+        this.scene.translate(this.position.x, this.position.y, this.position.z);
         this.scene.rotate(this.angles[0], 1, 0, 0);
         this.scene.rotate(this.angles[1], 0, 1, 0);
         this.scene.rotate(this.angles[2], 0, 0, 1);

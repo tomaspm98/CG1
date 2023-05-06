@@ -1,4 +1,5 @@
 import { CGFobject } from '../lib/CGF.js';
+import { MyPosition } from './MyPosition.js';
 import { BirdBody } from './bird/BirdBody.js';
 import { BirdHead } from './bird/BirdHead.js';
 import { BirdLeg } from './bird/BirdLeg.js';
@@ -11,19 +12,19 @@ import { BirdWing } from './bird/BirdWing.js';
 /**
 * MyBird
 * @constructor
- * @param scene - Reference to MyScene object
+ * @param scene     - Reference to MyScene object
+ * @param start_pos - Initial bird position
 */
 export class MyBird extends CGFobject {
-    constructor(scene) {
+    constructor(scene, start_pos) {
         super(scene);
+        this.startPosition = new MyPosition(start_pos.x, start_pos.y + 5, start_pos.z);
         this.initParams();
         this.initParts();
     }
 
     initParams() {
-        this.x = 0;
-        this.y = 5;
-        this.z = 0;
+        this.position = this.startPosition;
         this.orientation = 0;
 
         //Objects connected to MyInterface
@@ -57,8 +58,8 @@ export class MyBird extends CGFobject {
         this.dy = this.yScale * Math.sin((t/1000) * 2*Math.PI);
         this.dWingAngle = 
             -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t/1000) * 2*Math.PI);
-        this.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
-        this.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);   
+        this.position.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
+        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);   
 
     }
 
@@ -71,9 +72,7 @@ export class MyBird extends CGFobject {
     }
 
     resetBird() {
-        this.x = 0;
-        this.y = 5;
-        this.z = 0;
+        this.position = this.startPosition;
         this.orientation = 0;
         this.speed = 0;
     }
@@ -81,10 +80,10 @@ export class MyBird extends CGFobject {
     display() {
         this.scene.pushMatrix();
 
-        this.scene.translate(this.x, this.y + this.dy, this.z);
-        this.scene.translate(0.0, this.y, -0.6);
+        this.scene.translate(this.position.x, this.position.y + this.dy, this.position.z);
+        this.scene.translate(0.0, 0.0, -0.6);
         this.scene.rotate(this.orientation, 0, 1, 0);
-        this.scene.translate(0.0, -this.y, 0.6);
+        this.scene.translate(0.0, 0.0, 0.6);
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.head.display();

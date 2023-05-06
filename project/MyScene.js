@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from "../lib/CGF.js";
 import { MyBird } from "./MyBird.js";
 import { MyPanorama } from "./MyPanorama.js";
+import { MyPosition } from "./MyPosition.js";
 import { MyTerrain } from "./MyTerrain.js";
 import { MyBirdEgg } from "./bird/MyBirdEgg.js";
 import { MyNest } from "./bird/MyNest.js";
@@ -17,9 +18,10 @@ export class MyScene extends CGFscene {
   init(application) {
     super.init(application);
     
-    this.birdStartPos = vec3.fromValues(40, -58, 50);
+    this.birdStartPos = new MyPosition(40, -58, 50);
     this.numEggs = 4;
     this.flatAreaXInt = [-10, 60];
+    this.flatAreaY = -59.5;
     this.flatAreaZInt = [30, 75];
 
     this.initCameras();
@@ -37,14 +39,15 @@ export class MyScene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.terrain = new MyTerrain(this);
     this.panorama = new MyPanorama(this, new CGFtexture(this, "images/panorama4.jpg"));
-    this.bird = new MyBird(this);
-    this.nest = new MyNest(this,
-      getRandomIntInclusive(this.flatAreaXInt[0], this.flatAreaXInt[1]),
-      getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
+    this.bird = new MyBird(this, this.birdStartPos);
+    this.nest = new MyNest(this, new MyPosition(
+        getRandomIntInclusive(this.flatAreaXInt[0], this.flatAreaXInt[1]),
+        this.flatAreaY,
+        getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
+      )
     );
 
     this.initEggs();
-    console.log(this.eggs);
 
     //Bird displacement variables
     this.aceleration = 0.1;
@@ -70,21 +73,29 @@ export class MyScene extends CGFscene {
       1.0,
       0.1,
       1000,
-      vec3.fromValues(this.birdStartPos[0] + 5, this.birdStartPos[1] + 5, this.birdStartPos[2] - 10),
-      this.birdStartPos
+      vec3.fromValues(this.birdStartPos.x + 5, this.birdStartPos.y + 5, this.birdStartPos.z - 10),
+      this.birdStartPos.toVec3()
     );
     this.camera.zoom(-10);
   }
   initEggs() {
     this.eggs = new Array(this.numEggs);
     const angle = a => getRandomArbitrary(-Math.PI/2, Math.PI/2);
-    var x, z, angles;
+    const minDist = 5;
+    var pos, angles;
 
     for(var i = 0; i < this.numEggs; i++) {
-      x = getRandomIntInclusive(this.flatAreaXInt[0], this.flatAreaXInt[1]);
-      z = getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1]);
+      do {
+        pos = new MyPosition(
+          getRandomIntInclusive(this.flatAreaXInt[0], this.flatAreaXInt[1]),
+          this.flatAreaY,
+          getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
+        );
+        console.log(pos);
+      } while(this.eggs.some(egg => pos.withinRadius(egg.position, minDist)) || pos.withinRadius(this.nest.position, minDist));
+
       angles = new Array(3).fill().map(angle);
-      this.eggs[i] = new MyBirdEgg(this, x, z, angles);
+      this.eggs[i] = new MyBirdEgg(this, pos, angles);
     }
   }
   setDefaultAppearance() {
@@ -162,15 +173,11 @@ export class MyScene extends CGFscene {
     this.popMatrix();
 
     this.setActiveShader(this.defaultShader);
-    this.panorama.display(this.camera.position);
 
+    this.panorama.display(this.camera.position);
     this.nest.display();
     this.eggs.forEach(egg => egg.display());
-
-    this.pushMatrix();
-    this.translate(this.birdStartPos[0], this.birdStartPos[1], this.birdStartPos[2]);
     this.bird.display();
-    this.popMatrix();
     // ---- END Primitive drawing section
   }
 }

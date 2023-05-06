@@ -6,15 +6,12 @@ import { MyTorus } from "../objects/MyTorus.js";
 * MyNest
 * @constructor
  * @param scene     - Reference to MyScene object
- * @param x         - Egg x coordinate in the scene
- * @param z         - Egg z coordinate in the scene
+ * @param pos       - Initial position
 */
 export class MyNest extends CGFobject {
-    constructor(scene, x, z) {
+    constructor(scene, pos) {
         super(scene);
-        this.x = x;
-        this.y = -59.5;
-        this.z = z;
+        this.position = pos;
 
         this.initParts();
         this.initMaterials();
@@ -38,14 +35,14 @@ export class MyNest extends CGFobject {
         this.nestMaterial.apply();
 
         this.scene.pushMatrix();
-        this.scene.translate(this.x, this.y, this.z);
+        this.scene.translate(this.position.x, this.position.y, this.position.z);
         this.scene.scale(1, 0.8, 1);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
         this.outerRing.display();
         this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(this.x, this.y, this.z);
+        this.scene.translate(this.position.x, this.position.y, this.position.z);
         this.scene.rotate(-Math.PI/2, 1, 0, 0);
         this.floor.display();
         this.scene.popMatrix();
