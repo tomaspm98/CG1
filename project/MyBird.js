@@ -5,6 +5,7 @@ import { BirdHead } from './bird/BirdHead.js';
 import { BirdLeg } from './bird/BirdLeg.js';
 import { BirdTail } from './bird/BirdTail.js';
 import { BirdWing } from './bird/BirdWing.js';
+import { MyBirdEgg } from './bird/MyBirdEgg.js';
 
 //TODO: Add claws (maybe)
 //TODO: Add textures
@@ -24,7 +25,7 @@ export class MyBird extends CGFobject {
     }
 
     initParams() {
-        this.position = this.startPosition;
+        this.position = JSON.parse(JSON.stringify(this.startPosition));
         this.orientation = 0;
 
         //Objects connected to MyInterface
@@ -40,6 +41,13 @@ export class MyBird extends CGFobject {
         this.speed = 0;
         this.maxSpeed = 5;
         this.speedScale = 0.5;
+
+        this.pickupDropState = 0; // 0: normal, 1: descending, 2: ascending
+        this.pickupDropTime = 1000; // 2 seconds in milliseconds
+        this.pickupDropStartTime = 0;
+        this.initialHeight = this.startPosition.y;
+        this.groundHeight = this.initialHeight - 5;
+        this.caughtEgg=null;
     }
 
     initParts() {
@@ -59,7 +67,23 @@ export class MyBird extends CGFobject {
         this.dWingAngle = 
             -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t/1000) * 2*Math.PI);
         this.position.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
-        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);   
+        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000); 
+        if (this.pickupDropState !== 0) {
+            const progress = Math.min(1, (t - this.pickupDropStartTime) / this.pickupDropTime);
+            const heightDifference = this.initialHeight - this.groundHeight;
+    
+            if (this.pickupDropState === 1) {
+                this.position.y = this.initialHeight - progress * heightDifference;
+                if (progress >= 1) {
+                    this.pickupDropState = 2;
+                    this.pickupDropStartTime = t;
+                }
+            } else if (this.pickupDropState === 2) {
+                this.position.y = this.groundHeight + progress * heightDifference;
+                if (progress >= 1) this.pickupDropState = 0;
+            }
+        } 
+        //this.updateRockPos();
 
     }
 
@@ -72,10 +96,41 @@ export class MyBird extends CGFobject {
     }
 
     resetBird() {
-        this.position = this.startPosition;
+        this.position = JSON.parse(JSON.stringify(this.startPosition));
         this.orientation = 0;
         this.speed = 0;
     }
+
+    pickupDropEgg() {
+        if (this.pickupDropState === 0) {
+            this.pickupDropState = 1;
+            this.pickupDropStartTime = Date.now();
+        }
+
+        /*if (this.caughtEgg === null) {
+            for (let i = 0; i < this.scene.eggs.length; i++) {
+                if (this.scene.eggs[i].position.withinRadius(this.position, 3)) {
+                    this.caughtEgg = JSON.parse(JSON.stringify(this.scene.eggs[i]));
+                    this.scene.eggs.splice(i, 1);
+                    break;
+                }
+            }
+        
+    }*/
+ }
+    dropEgg() {
+        if (this.caughtEgg) {
+            this.caughtEgg.position = this.position;
+            this.scene.nest.addEgg(this.caughtEgg);
+            this.caughtEgg = null;
+          }
+      }
+
+      /*updateRockPos() {
+        if (this.caughtEgg) 
+            this.caughtEgg.pos = [this.position.x + 0.75 * Math.sin(this.orientation), this.position.y, this.position.z + 0.75 * Math.cos(this.orientation)];
+       
+    }*/
 
     display() {
         this.scene.pushMatrix();
@@ -113,7 +168,33 @@ export class MyBird extends CGFobject {
         this.rightLeg.display();
         this.scene.popMatrix();
 
+        this.scene.pushMatrix();
         this.tail.display();
         this.scene.popMatrix();
-    }
+        
+        if (this.caughtEgg !== null) {
+    
+            this.scene.pushMatrix();
+            this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
+            //this.scene.translate(-this.position.x,-this.position.y-this.dy,-this.position.z);
+            //this.scene.scale(0.5,0.5,0.5);
+            //this.scene.translate(this.caughtEgg.position.x, this.caughtEgg.position.y, this.caughtEgg.position.z);
+            //this.scene.translate(-this.caughtEgg.position.x, -this.caughtEgg.position.y, -this.caughtEgg.position.z);
+            console.log("BIRD");
+            console.log(this.position.x,this.position.y,this.position.z);
+            console.log("OVO");
+            console.log(this.caughtEgg.position.x,this.caughtEgg.position.y, this.caughtEgg.position.z);
+            //this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
+            //this.scene.translate(this.position.x, this.position.y-1.0, this.position.z); // Adjust the position to display the egg between the bird's legs
+            //this.scene.scale(0.4, 0.5, 0.4);
+            //this.scene.translate(0.1,-0.5,-0.5);
+            //this.scene.scale(0.5,0.5,0.5);
+            this.caughtEgg.display();
+            this.scene.popMatrix();
+          }
+
+         
+          
+        
+}
 }

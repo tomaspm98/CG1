@@ -138,6 +138,23 @@ export class MyScene extends CGFscene {
       keysPressed = true;
     }
 
+    if (this.gui.isKeyPressed("KeyP")) {
+      text += " P ";
+      this.bird.pickupDropEgg();
+      keysPressed = true;
+  }
+
+    if (this.gui.isKeyPressed("KeyO")) {
+      text += " O ";
+      if (this.bird.caughtEgg && this.calculateDistance(this.bird.position,this.nest.position) <= 10) {
+        const droppedEgg = this.bird.dropEgg();
+        if (droppedEgg) {
+          this.nest.receiveEgg(droppedEgg);
+        }
+      }
+      keysPressed = true;
+    }
+
     if (keysPressed)
       console.log(text);
   }
@@ -146,10 +163,36 @@ export class MyScene extends CGFscene {
     this.checkKeys();
 
     var dt = t - this.timePrevFrame;
+    this.checkForEggCollision();
     this.bird.update(t, dt);
 
     this.timePrevFrame = t;
+
+    //this.checkForEggCollision();
   }
+
+  //helper function to calculate the distance
+  calculateDistance(pos1, pos2) {
+    const dx = pos1.x - pos2.x;
+    const dy = pos1.y - pos2.y;
+    const dz = pos1.z - pos2.z;
+
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  }
+
+  checkForEggCollision() {
+    const tolerance = 3.0;
+
+    this.eggs.forEach((egg, index) => {
+        if (this.calculateDistance(this.bird.position, egg.position) <= tolerance && this.bird.position.y <= this.flatAreaY + tolerance) {
+            if (this.bird.caughtEgg === null) {
+                this.bird.caughtEgg = egg;
+                this.eggs.splice(index, 1);
+            }
+        }
+    });
+}
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -178,6 +221,7 @@ export class MyScene extends CGFscene {
     this.nest.display();
     this.eggs.forEach(egg => egg.display());
     this.bird.display();
+    
     // ---- END Primitive drawing section
   }
 }

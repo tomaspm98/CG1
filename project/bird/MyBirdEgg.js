@@ -1,5 +1,6 @@
 import { CGFappearance, CGFobject } from "../../lib/CGF.js";
 import { MySphere } from "../MySphere.js";
+import { MyPosition } from "../MyPosition.js";
 
 /**
 * MyBirdEgg
@@ -13,6 +14,7 @@ export class MyBirdEgg extends CGFobject {
         super(scene);
         this.position = pos;
         this.angles = angles;
+        this.initialPosition = new MyPosition(pos.x, pos.y, pos.z);
         this.initParts();
         this.initMaterials();
     }
@@ -29,11 +31,18 @@ export class MyBirdEgg extends CGFobject {
         this.eggMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
     }
 
+    updatePosition(birdPosition) {
+        this.position.x = birdPosition.x;
+        this.position.y = birdPosition.y - 1;
+        this.position.z = birdPosition.z;
+      }
+
     display() {
         this.eggMaterial.apply();
 
         this.scene.pushMatrix();
         this.scene.translate(this.position.x, this.position.y, this.position.z);
+        
         this.scene.rotate(this.angles[0], 1, 0, 0);
         this.scene.rotate(this.angles[1], 0, 1, 0);
         this.scene.rotate(this.angles[2], 0, 0, 1);
