@@ -187,7 +187,7 @@ export class MyBird extends CGFobject {
             //this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
             //this.scene.translate(this.position.x, this.position.y-1.0, this.position.z); // Adjust the position to display the egg between the bird's legs
             //this.scene.scale(0.4, 0.5, 0.4);
-            //this.scene.translate(0.1,-0.5,-0.5);
+            this.scene.translate(0.05,-0.7,-0.75);
             //this.scene.scale(0.5,0.5,0.5);
             this.caughtEgg.display();
             this.scene.popMatrix();

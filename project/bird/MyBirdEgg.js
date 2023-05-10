@@ -46,7 +46,7 @@ export class MyBirdEgg extends CGFobject {
         this.scene.rotate(this.angles[0], 1, 0, 0);
         this.scene.rotate(this.angles[1], 0, 1, 0);
         this.scene.rotate(this.angles[2], 0, 0, 1);
-        this.scene.scale(0.4, 0.5, 0.4);
+        this.scene.scale(0.2, 0.3, 0.2);
         this.egg.display();
         this.scene.popMatrix();
     }
