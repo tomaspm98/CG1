@@ -144,16 +144,27 @@ export class MyScene extends CGFscene {
       keysPressed = true;
   }
 
-    if (this.gui.isKeyPressed("KeyO")) {
-      text += " O ";
-      if (this.bird.caughtEgg && this.calculateDistance(this.bird.position,this.nest.position) <= 10) {
-        const droppedEgg = this.bird.dropEgg();
-        if (droppedEgg) {
-          this.nest.receiveEgg(droppedEgg);
-        }
+  if (this.gui.isKeyPressed("KeyO")) {
+    text += " O ";
+    if (this.bird.caughtEgg && this.calculateDistance(this.bird.position, this.nest.position) <= 10) {
+      const droppedEgg = this.bird.dropEgg();
+      if (droppedEgg) {
+        // Calculate new position for the egg inside the nest
+        const xOffset = this.nest.position.x + (Math.random() - 0.5) * 1;
+        const yOffset = this.nest.position.y + 0.5;
+        const zOffset = this.nest.position.z + (Math.random() - 0.5) * 1;
+  
+        droppedEgg.position.x = xOffset;
+        droppedEgg.position.y = yOffset;
+        droppedEgg.position.z = zOffset;
+  
+        this.nest.receiveEgg(droppedEgg);
       }
-      keysPressed = true;
     }
+    keysPressed = true;
+  }
+  
+  
 
     if (keysPressed)
       console.log(text);

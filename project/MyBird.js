@@ -83,7 +83,7 @@ export class MyBird extends CGFobject {
                 if (progress >= 1) this.pickupDropState = 0;
             }
         } 
-        //this.updateRockPos();
+       
 
     }
 
@@ -107,30 +107,24 @@ export class MyBird extends CGFobject {
             this.pickupDropStartTime = Date.now();
         }
 
-        /*if (this.caughtEgg === null) {
-            for (let i = 0; i < this.scene.eggs.length; i++) {
-                if (this.scene.eggs[i].position.withinRadius(this.position, 3)) {
-                    this.caughtEgg = JSON.parse(JSON.stringify(this.scene.eggs[i]));
-                    this.scene.eggs.splice(i, 1);
-                    break;
-                }
-            }
         
-    }*/
  }
     dropEgg() {
         if (this.caughtEgg) {
-            this.caughtEgg.position = this.position;
-            this.scene.nest.addEgg(this.caughtEgg);
+            let egg = this.caughtEgg;
             this.caughtEgg = null;
-          }
+    
+            // Update the dropped egg's position to the bird's current position
+            egg.position.x = this.position.x;
+            egg.position.y = this.position.y;
+            egg.position.z = this.position.z;
+    
+            return egg;
+        }
+        return null;
       }
 
-      /*updateRockPos() {
-        if (this.caughtEgg) 
-            this.caughtEgg.pos = [this.position.x + 0.75 * Math.sin(this.orientation), this.position.y, this.position.z + 0.75 * Math.cos(this.orientation)];
-       
-    }*/
+    
 
     display() {
         this.scene.pushMatrix();
@@ -176,19 +170,9 @@ export class MyBird extends CGFobject {
     
             this.scene.pushMatrix();
             this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
-            //this.scene.translate(-this.position.x,-this.position.y-this.dy,-this.position.z);
-            //this.scene.scale(0.5,0.5,0.5);
-            //this.scene.translate(this.caughtEgg.position.x, this.caughtEgg.position.y, this.caughtEgg.position.z);
-            //this.scene.translate(-this.caughtEgg.position.x, -this.caughtEgg.position.y, -this.caughtEgg.position.z);
-            console.log("BIRD");
             console.log(this.position.x,this.position.y,this.position.z);
-            console.log("OVO");
             console.log(this.caughtEgg.position.x,this.caughtEgg.position.y, this.caughtEgg.position.z);
-            //this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
-            //this.scene.translate(this.position.x, this.position.y-1.0, this.position.z); // Adjust the position to display the egg between the bird's legs
-            //this.scene.scale(0.4, 0.5, 0.4);
             this.scene.translate(0.05,-0.7,-0.75);
-            //this.scene.scale(0.5,0.5,0.5);
             this.caughtEgg.display();
             this.scene.popMatrix();
           }
