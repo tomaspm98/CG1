@@ -177,7 +177,7 @@ export class MyBird extends CGFobject {
             this.scene.popMatrix();
           }
 
-         
+        this.scene.popMatrix();
           
         
 }

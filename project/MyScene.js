@@ -1,4 +1,5 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from "../lib/CGF.js";
+import { MyBillboard } from "./MyBillboard.js";
 import { MyBird } from "./MyBird.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyPosition } from "./MyPosition.js";
@@ -21,7 +22,7 @@ export class MyScene extends CGFscene {
     this.birdStartPos = new MyPosition(40, -58, 50);
     this.numEggs = 4;
     this.flatAreaXInt = [-10, 60];
-    this.flatAreaY = -59.5;
+    this.flatAreaY = -59.8;
     this.flatAreaZInt = [30, 75];
 
     this.initCameras();
@@ -46,8 +47,8 @@ export class MyScene extends CGFscene {
         getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
       )
     );
-
     this.initEggs();
+    this.billboard = new MyBillboard(this);
 
     //Bird displacement variables
     this.aceleration = 0.1;
@@ -232,6 +233,7 @@ export class MyScene extends CGFscene {
     this.nest.display();
     this.eggs.forEach(egg => egg.display());
     this.bird.display();
+    this.billboard.display(this.bird.position.x, -59.5, this.bird.position.z, this.camera.calculateDirection());
     
     // ---- END Primitive drawing section
   }
