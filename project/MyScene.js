@@ -233,7 +233,7 @@ export class MyScene extends CGFscene {
     this.nest.display();
     this.eggs.forEach(egg => egg.display());
     this.bird.display();
-    this.billboard.display(this.bird.position.x, -59.5, this.bird.position.z, this.camera.calculateDirection());
+    this.billboard.display(this.bird.position.x, -60, this.bird.position.z, this.camera.calculateDirection());
     
     // ---- END Primitive drawing section
   }
