@@ -19,7 +19,7 @@ export class MyBillboard extends CGFobject {
 
     initMaterials() {
         this.treeMaterial = new CGFappearance(this.scene);
-        this.treeMaterial.loadTexture('images/billboardtree.png');
+        this.treeMaterial.loadTexture('images/billboardtree3.png');
         this.treeMaterial.setSpecular(0.0, 0.0, 0.0, 1.0);
         this.treeMaterial.setDiffuse(0.8, 0.8, 0.8, 1.0);
         this.treeMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
@@ -42,7 +42,7 @@ export class MyBillboard extends CGFobject {
         this.scene.pushMatrix();
         this.scene.translate(x, y, z);
         this.scene.rotate(this.rotAngle + Math.PI, 0, 1, 0);
-        this.scene.scale(6.0, 8.0, 6.0);
+        this.scene.scale(6.0, 8.0, 1.0);
         this.scene.translate(0.0, 0.5, 0.0);
         this.quad.display();
         this.scene.popMatrix();
