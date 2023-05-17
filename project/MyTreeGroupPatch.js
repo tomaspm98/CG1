@@ -1,6 +1,6 @@
 import { CGFobject } from "../lib/CGF.js";
 import { MyBillboard } from "./MyBillboard.js";
-import { getRandomArbitrary, randomChoose } from "./utils.js";
+import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "./utils.js";
 /**
  * MyTreeGroupPatch
  * @constructor
@@ -17,13 +17,22 @@ export class MyTreeGroupPatch extends CGFobject {
     }
 
     initParts() {
-        this.treePatch = [];
+        const scale = s => getRandomIntInclusive(6, 9);
+
+        this.treeGroup = [];
         for(let i = 0; i < this.treeGroupPositions.length; i++)
-            this.treePatch.push(new MyBillboard(this.scene, randomChoose(this.scene.treeTextures)));
+            this.treeGroup.push(
+                new MyBillboard(
+                    this.scene, 
+                    randomChoice(this.scene.treeTextures),
+                    new Array(2).fill().map(scale)
+                )
+            );
     }
 
-    //TODO: Make this prettier
     randomizePositions() {
+        let displacement = 0.2;
+        let distScale = 10;
         let treeGroupBasePositions = [
             [-1,  1], [0,  1], [1,  1],
             [-1,  0], [0,  0], [1,  0],
@@ -32,18 +41,25 @@ export class MyTreeGroupPatch extends CGFobject {
 
         this.treeGroupPositions = [];
 
-        treeGroupBasePositions.map(pos => this.treeGroupPositions.push([pos[0] + getRandomArbitrary(-0.2, 0.2), pos[1] + getRandomArbitrary(-0.2, 0.2)]));
-        console.log(this.treeGroupPositions);
+        treeGroupBasePositions.map(pos => 
+            this.treeGroupPositions.push(
+                pos.map(comp => 
+                    (comp + getRandomArbitrary(-displacement, displacement)) * distScale
+                )
+            )
+        );
     }
 
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(this.position.x, this.position.y, this.position.z);
+        this.scene.translate(this.position.x, this.position.y - 0.2, this.position.z);
+
+        let cameraDir = this.scene.camera.calculateDirection();
         for(let i = 0; i < this.treeGroupPositions.length; i++) {
-            let treePosition = this.treeGroupPositions[i].map(comp => comp * 10);
-            let cameraDir = this.scene.camera.calculateDirection();
-            this.treePatch[i].display(treePosition[0], 0, treePosition[1], cameraDir);
+            let treePosition = this.treeGroupPositions[i];
+            this.treeGroup[i].display(treePosition[0], 0, treePosition[1], cameraDir);
         }
+
         this.scene.popMatrix();
     }
 }

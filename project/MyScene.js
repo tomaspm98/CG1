@@ -6,7 +6,7 @@ import { MyPosition } from "./MyPosition.js";
 import { MyTerrain } from "./MyTerrain.js";
 import { MyBirdEgg } from "./bird/MyBirdEgg.js";
 import { MyNest } from "./bird/MyNest.js";
-import { getRandomArbitrary, getRandomIntInclusive } from "./utils.js";
+import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "./utils.js";
 import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
 import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
 
@@ -21,11 +21,17 @@ export class MyScene extends CGFscene {
   init(application) {
     super.init(application);
     
-    this.birdStartPos = new MyPosition(40, -58, 50);
+    this.birdStartPos = new MyPosition(40, -55, 50);
     this.numEggs = 4;
-    this.flatAreaXInt = [-10, 60];
+    this.numTreePatches = 8;
+    this.flatAreaXInt = [-15, 60];
     this.flatAreaY = -59.8;
     this.flatAreaZInt = [30, 75];
+
+    this.treePatchTypes = {
+      GroupPatch : Symbol("groupPatch"),
+      RowPatch   : Symbol("rowPatch")
+    };
 
     this.treeTextures = [
       new CGFtexture(this, 'images/billboardtree.png'),
@@ -56,9 +62,8 @@ export class MyScene extends CGFscene {
       )
     );
     this.initEggs();
-    this.billboard = new MyBillboard(this, this.treeTextures[0]);
-    this.treeGroupPatch = new MyTreeGroupPatch(this, new MyPosition(this.flatAreaXInt[0] + 10, this.flatAreaY, this.flatAreaZInt[0] + 10));
-    this.treeRowPatch = new MyTreeRowPatch(this, new MyPosition(this.flatAreaXInt[1], this.flatAreaY, this.flatAreaZInt[1]));
+    this.initTrees();
+
     //Bird displacement variables
     this.aceleration = 0.1;
     this.theta = Math.PI/32;
@@ -79,11 +84,12 @@ export class MyScene extends CGFscene {
     this.lights[0].update();
   }
   initCameras() {
+    let camOffset = [5, 5, -10];
     this.camera = new CGFcamera(
       1.0,
       0.1,
       1000,
-      vec3.fromValues(this.birdStartPos.x + 5, this.birdStartPos.y + 5, this.birdStartPos.z - 10),
+      vec3.fromValues(this.birdStartPos.x + camOffset[0], this.birdStartPos.y + camOffset[1], this.birdStartPos.z + camOffset[2]),
       this.birdStartPos.toVec3()
     );
     this.camera.zoom(-10);
@@ -91,7 +97,7 @@ export class MyScene extends CGFscene {
   initEggs() {
     this.eggs = new Array(this.numEggs);
     const angle = a => getRandomArbitrary(-Math.PI/2, Math.PI/2);
-    const minDist = 5;
+    const minDist = 25;
     var pos, angles;
 
     for(var i = 0; i < this.numEggs; i++) {
@@ -101,11 +107,42 @@ export class MyScene extends CGFscene {
           this.flatAreaY,
           getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
         );
-        console.log(pos);
       } while(this.eggs.some(egg => pos.withinRadius(egg.position, minDist)) || pos.withinRadius(this.nest.position, minDist));
 
       angles = new Array(3).fill().map(angle);
       this.eggs[i] = new MyBirdEgg(this, pos, angles);
+    }
+  }
+  initTrees() {
+    this.treePatches = new Array(this.numTreePatches);
+    const minDist = 5;
+    const treeOffset = 10;
+
+    for(var i = 0; i < this.numTreePatches; i++) {
+      let patchType = randomChoice(Object.values(this.treePatchTypes));
+      let treePatch, pos;
+      do {
+        switch(patchType) {
+          case this.treePatchTypes.GroupPatch:
+            pos = new MyPosition(
+              getRandomIntInclusive(this.flatAreaXInt[0] + treeOffset, this.flatAreaXInt[1] - treeOffset),
+              this.flatAreaY,
+              getRandomIntInclusive(this.flatAreaZInt[0] + treeOffset, this.flatAreaZInt[1] - treeOffset)
+            );
+            treePatch = new MyTreeGroupPatch(this, pos);
+            break;
+          case this.treePatchTypes.RowPatch:
+            pos = new MyPosition(
+              getRandomIntInclusive(this.flatAreaXInt[0] + treeOffset, this.flatAreaXInt[1] - treeOffset),
+              this.flatAreaY,
+              getRandomIntInclusive(this.flatAreaZInt[0], this.flatAreaZInt[1])
+            );
+            treePatch = new MyTreeRowPatch(this, pos);
+            break;
+        }
+      } while(this.treePatches.some(treePatch => pos.withinRadius(treePatch.position, minDist)));
+      
+      this.treePatches[i] = treePatch;
     }
   }
   setDefaultAppearance() {
@@ -241,10 +278,8 @@ export class MyScene extends CGFscene {
     this.panorama.display(this.camera.position);
     this.nest.display();
     this.eggs.forEach(egg => egg.display());
+    this.treePatches.forEach(treePatch => treePatch.display());
     this.bird.display();
-    this.billboard.display(this.bird.position.x, -60, this.bird.position.z, this.camera.calculateDirection());
-    this.treeGroupPatch.display();
-    this.treeRowPatch.display();
     // ---- END Primitive drawing section
   }
 }

@@ -10,7 +10,7 @@ export function getRandomIntInclusive(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function randomChoose(choices) {
+export function randomChoice(choices) {
     let index = Math.floor(Math.random() * choices.length);
     return choices[index];
 }
