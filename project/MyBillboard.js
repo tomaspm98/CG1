@@ -4,11 +4,13 @@ import { MyQuad } from './objects/MyQuad.js';
 * MyBillboard
 * @constructor
  * @param scene - Reference to MyScene object
+ * @param texture - Tree texture to be applied
 */
 
 export class MyBillboard extends CGFobject {
-    constructor(scene) {
+    constructor(scene, texture) {
         super(scene);
+        this.texture = texture;
         this.initParts();
         this.initMaterials();
     }
@@ -19,7 +21,7 @@ export class MyBillboard extends CGFobject {
 
     initMaterials() {
         this.treeMaterial = new CGFappearance(this.scene);
-        this.treeMaterial.loadTexture('images/billboardtree3.png');
+        this.treeMaterial.setTexture(this.texture);
         this.treeMaterial.setSpecular(0.0, 0.0, 0.0, 1.0);
         this.treeMaterial.setDiffuse(0.8, 0.8, 0.8, 1.0);
         this.treeMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);

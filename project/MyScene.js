@@ -7,6 +7,8 @@ import { MyTerrain } from "./MyTerrain.js";
 import { MyBirdEgg } from "./bird/MyBirdEgg.js";
 import { MyNest } from "./bird/MyNest.js";
 import { getRandomArbitrary, getRandomIntInclusive } from "./utils.js";
+import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
+import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
 
 /**
  * MyScene
@@ -24,6 +26,12 @@ export class MyScene extends CGFscene {
     this.flatAreaXInt = [-10, 60];
     this.flatAreaY = -59.8;
     this.flatAreaZInt = [30, 75];
+
+    this.treeTextures = [
+      new CGFtexture(this, 'images/billboardtree.png'),
+      new CGFtexture(this, 'images/billboardtree2.png'),
+      new CGFtexture(this, 'images/billboardtree3.png')
+    ];
 
     this.initCameras();
     this.initLights();
@@ -48,8 +56,9 @@ export class MyScene extends CGFscene {
       )
     );
     this.initEggs();
-    this.billboard = new MyBillboard(this);
-
+    this.billboard = new MyBillboard(this, this.treeTextures[0]);
+    this.treeGroupPatch = new MyTreeGroupPatch(this, new MyPosition(this.flatAreaXInt[0] + 10, this.flatAreaY, this.flatAreaZInt[0] + 10));
+    this.treeRowPatch = new MyTreeRowPatch(this, new MyPosition(this.flatAreaXInt[1], this.flatAreaY, this.flatAreaZInt[1]));
     //Bird displacement variables
     this.aceleration = 0.1;
     this.theta = Math.PI/32;
@@ -234,7 +243,8 @@ export class MyScene extends CGFscene {
     this.eggs.forEach(egg => egg.display());
     this.bird.display();
     this.billboard.display(this.bird.position.x, -60, this.bird.position.z, this.camera.calculateDirection());
-    
+    this.treeGroupPatch.display();
+    this.treeRowPatch.display();
     // ---- END Primitive drawing section
   }
 }
