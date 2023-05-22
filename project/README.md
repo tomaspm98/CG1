@@ -32,7 +32,16 @@
 ### Point 4 - Terrain
 - The shaders used to create the terrain were based on the shaders used in [tp5](../tp5/README.md) to create the wave effect on water. They differ in the inclusion of a third texture for the shaders of this project, the altimetry to change the color of the terrain based on its height.
 - In order to align the coordinates of the terrain with its color on the altimetry texture, the blue color component of the corresponding heightmap texture coordinates was inverted (because the altimetry goes from bottom to the top, however the starting point of the texture coordinates is at the top).
-- To get the flat area on both the terrain and on the heightmap, both their images were edited using the website [pixlr](https://pixlr.com/x/).
+- To get the flat area on both the terrain and on the heightmap, both their images were edited using the website [pixlr.com](https://pixlr.com/x/).
+
+### Point 5 - Eggs and Nest
+#### Subpoint 1 - Object Creation
+- The nest is created using a torus (from *MyTorus* class) and a flat, one-sided circle (from *MyCircle* class). The texture coordinates for the nest's circular base were adjusted so that the square texture could be correctly drawn on the circle's surface.
+- The number of eggs in the scene is adjustable. Their positions, as well as the nest's, are randomly generated within the flat area of the terrain. For the eggs, their rotation is also randomly generated. The positions of the eggs and nest avoid overlapping by use of a mininum distance between them.
+- In theory, both the eggs and the nest are drawn right on top of the flat terrain surface ($y=-60$), however, in the case of the eggs, they may clip slightly into the terrain due to their random rotations.
+
+#### Subpoint 2 - Catching and Dropping Eggs
+- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
 
 ## Screenshots
 | ![Screenshot 1](screenshots/project-t03g06-1.gif) |
@@ -46,3 +55,7 @@
 | ![Screenshot 3](screenshots/project-t03g06-3.png) |
 |:--:|
 | *Fig. 3 - Two view angles of the scene containing the bird, terrain and background.* |
+
+| ![Screenshot 4](screenshots/project-t03g06-4.png) |
+|:--:|
+| *Fig. 4 - View of the terrain with the eggs and nest.* |

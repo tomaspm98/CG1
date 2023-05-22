@@ -1,9 +1,11 @@
 import { CGFobject } from '../lib/CGF.js';
+import { MyPosition } from './MyPosition.js';
 import { BirdBody } from './bird/BirdBody.js';
 import { BirdHead } from './bird/BirdHead.js';
 import { BirdLeg } from './bird/BirdLeg.js';
 import { BirdTail } from './bird/BirdTail.js';
 import { BirdWing } from './bird/BirdWing.js';
+import { MyBirdEgg } from './bird/MyBirdEgg.js';
 
 //TODO: Add claws (maybe)
 //TODO: Add textures
@@ -11,19 +13,19 @@ import { BirdWing } from './bird/BirdWing.js';
 /**
 * MyBird
 * @constructor
- * @param scene - Reference to MyScene object
+ * @param scene     - Reference to MyScene object
+ * @param start_pos - Initial bird position
 */
 export class MyBird extends CGFobject {
-    constructor(scene) {
+    constructor(scene, start_pos) {
         super(scene);
+        this.startPosition = new MyPosition(start_pos.x, start_pos.y + 5, start_pos.z);
         this.initParams();
         this.initParts();
     }
 
     initParams() {
-        this.x = 0;
-        this.y = 5;
-        this.z = 0;
+        this.position = JSON.parse(JSON.stringify(this.startPosition));
         this.orientation = 0;
 
         //Objects connected to MyInterface
@@ -39,6 +41,13 @@ export class MyBird extends CGFobject {
         this.speed = 0;
         this.maxSpeed = 5;
         this.speedScale = 0.5;
+
+        this.pickupDropState = 0; // 0: normal, 1: descending, 2: ascending
+        this.pickupDropTime = 1000; // 2 seconds in milliseconds
+        this.pickupDropStartTime = 0;
+        this.initialHeight = this.startPosition.y;
+        this.groundHeight = this.initialHeight - 5;
+        this.caughtEgg=null;
     }
 
     initParts() {
@@ -57,9 +66,24 @@ export class MyBird extends CGFobject {
         this.dy = this.yScale * Math.sin((t/1000) * 2*Math.PI);
         this.dWingAngle = 
             -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t/1000) * 2*Math.PI);
-        this.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
-        this.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);   
-
+        this.position.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
+        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000); 
+        if (this.pickupDropState !== 0) {
+            const progress = Math.min(1, (t - this.pickupDropStartTime) / this.pickupDropTime);
+            const heightDifference = this.initialHeight - this.groundHeight;
+    
+            if (this.pickupDropState === 1) {
+                this.position.y = this.initialHeight - progress * heightDifference;
+                if (progress >= 1) {
+                    this.checkForEggCollision(this.scene.eggs,this.scene.flatAreaY); 
+                    this.pickupDropState = 2;
+                    this.pickupDropStartTime = t;
+                }
+            } else if (this.pickupDropState === 2) {
+                this.position.y = this.groundHeight + progress * heightDifference;
+                if (progress >= 1) this.pickupDropState = 0;
+            }
+        }
     }
 
     accelerate(v) {
@@ -71,20 +95,89 @@ export class MyBird extends CGFobject {
     }
 
     resetBird() {
-        this.x = 0;
-        this.y = 5;
-        this.z = 0;
+        this.position = JSON.parse(JSON.stringify(this.startPosition));
         this.orientation = 0;
         this.speed = 0;
     }
 
+    pickupDropEgg() {
+        if (this.pickupDropState === 0) {
+            this.pickupDropState = 1;
+            this.pickupDropStartTime = Date.now();
+            
+        }
+    }
+
+    dropEgg() {
+        if (this.caughtEgg) {
+            let egg = this.caughtEgg;
+            this.caughtEgg = null;
+    
+            // Update the dropped egg's position to the bird's current position
+            egg.position.x = this.position.x+0.05;
+            egg.position.y = this.position.y-0.7;
+            egg.position.z = this.position.z-0.75;
+            return egg;
+        }
+        return null;
+      }
+
+    droparOvo(nest, flatAreaY) {
+        if (this.caughtEgg && this.calculateDistance(this.position, nest.position) <= 8) {
+            this.droppedEgg = this.dropEgg();
+            if (this.droppedEgg) {
+                this.droppedEgg.offset = {x: (Math.random() - 0.5) * 1, y: 0, z: (Math.random() - 0.5) * 1};
+                
+                var dx = (nest.position.x + this.droppedEgg.offset.x) - this.position.x;
+                var dy = this.position.y - (nest.position.y + this.droppedEgg.offset.y);  
+                var dz = (nest.position.z + this.droppedEgg.offset.z) - this.position.z;
+                var gravity = 15;  
+                var timeToFall = Math.sqrt(2*dy/gravity);  
+        
+                this.droppedEgg.velocity = {x: dx/timeToFall, y: 0, z: dz/timeToFall}; 
+                nest.receiveEgg(this.droppedEgg);
+            }
+        }
+    }
+
+    get droppedEgg() {
+        return this._droppedEgg;
+    }
+
+    set droppedEgg(value) {
+        this._droppedEgg = value;
+    }
+
+    calculateDistance(pos1, pos2) {
+        const dx = pos1.x - pos2.x;
+        const dy = pos1.y - pos2.y;
+        const dz = pos1.z - pos2.z;
+    
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    checkForEggCollision(eggs,flatAreaY) {
+        const tolerance = 3.0;
+    
+        eggs.forEach((egg, index) => {
+            if (this.calculateDistance(this.position, egg.position) <= tolerance && this.position.y <= flatAreaY + tolerance) {
+                if (this.caughtEgg === null) {
+                    this.caughtEgg = egg;
+                    eggs.splice(index, 1);
+                }
+            }
+        });
+    }
+
+    
+
     display() {
         this.scene.pushMatrix();
 
-        this.scene.translate(this.x, this.y + this.dy, this.z);
-        this.scene.translate(0.0, this.y, -0.6);
+        this.scene.translate(this.position.x, this.position.y + this.dy, this.position.z);
+        this.scene.translate(0.0, 0.0, -0.6);
         this.scene.rotate(this.orientation, 0, 1, 0);
-        this.scene.translate(0.0, -this.y, 0.6);
+        this.scene.translate(0.0, 0.0, 0.6);
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.head.display();
@@ -114,7 +207,16 @@ export class MyBird extends CGFobject {
         this.rightLeg.display();
         this.scene.popMatrix();
 
+        this.scene.pushMatrix();
         this.tail.display();
         this.scene.popMatrix();
+        
+        if (this.caughtEgg !== null) {
+            this.scene.pushMatrix();
+            this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
+            this.scene.translate(0.05,-0.7,-0.75);
+            this.caughtEgg.display();
+            this.scene.popMatrix();
+        }     
     }
 }

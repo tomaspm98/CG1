@@ -29,7 +29,7 @@ export class BirdTail extends CGFobject {
     display() {
         this.tailMaterial.apply();
         this.scene.pushMatrix();
-        this.scene.translate(0, -0.3, -1.6);
+        this.scene.translate(0, -0.4, -1.5);
         this.scene.scale(0.6, 0.6, 0.6);
         this.scene.rotate(Math.PI/2, 1, 0, 0);
         this.scene.rotate(Math.PI/4, 0, 1, 0);
