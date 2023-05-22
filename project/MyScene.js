@@ -55,7 +55,7 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayAxis = true;
-
+    this.droppedEgg = null;  
     this.enableTextures(true);
 
     
@@ -146,21 +146,7 @@ export class MyScene extends CGFscene {
 
   if (this.gui.isKeyPressed("KeyO")) {
     text += " O ";
-    if (this.bird.caughtEgg && this.calculateDistance(this.bird.position, this.nest.position) <= 10) {
-      const droppedEgg = this.bird.dropEgg();
-      if (droppedEgg) {
-        // Calculate new position for the egg inside the nest
-        const xOffset = this.nest.position.x + (Math.random() - 0.5) * 1;
-        const yOffset = this.nest.position.y + 0.5;
-        const zOffset = this.nest.position.z + (Math.random() - 0.5) * 1;
-  
-        droppedEgg.position.x = xOffset;
-        droppedEgg.position.y = yOffset;
-        droppedEgg.position.z = zOffset;
-  
-        this.nest.receiveEgg(droppedEgg);
-      }
-    }
+    this.droparOvo();
     keysPressed = true;
   }
   
@@ -170,19 +156,61 @@ export class MyScene extends CGFscene {
       console.log(text);
   }
 
+  droparOvo(){
+    if (this.bird.caughtEgg && this.calculateDistance(this.bird.position, this.nest.position) <= 8) {
+      this.droppedEgg = this.bird.dropEgg();
+      if (this.droppedEgg) {
+        this.droppedEgg.offset = {x: (Math.random() - 0.5) * 1, y: 0, z: (Math.random() - 0.5) * 1};
+        
+        var dx = (this.nest.position.x + this.droppedEgg.offset.x) - this.bird.position.x;
+        var dy = this.bird.position.y - (this.nest.position.y + this.droppedEgg.offset.y);  
+        var dz = (this.nest.position.z + this.droppedEgg.offset.z) - this.bird.position.z;
+        var gravity = 15;  
+        var timeToFall = Math.sqrt(2*dy/gravity);  
+  
+        this.droppedEgg.velocity = {x: dx/timeToFall, y: 0, z: dz/timeToFall}; 
+        this.nest.receiveEgg(this.droppedEgg);
+        }
+      }
+    }
+    
+  
+
   update(t) {
     this.checkKeys();
 
     var dt = t - this.timePrevFrame;
+
+    
+    var gravity = 9.8; 
+    
+    if (this.droppedEgg){
+      this.droppedEgg.position.x += this.droppedEgg.velocity.x * (dt/1000);
+      this.droppedEgg.position.y += this.droppedEgg.velocity.y * (dt/1000) - 0.5*gravity*Math.pow((dt/1000),2);
+      this.droppedEgg.position.z += this.droppedEgg.velocity.z * (dt/1000);
+  
+      this.droppedEgg.velocity.y -= gravity * (dt/1000);
+
+      console.log("EGG VEL");
+      console.log(this.droppedEgg.position.x,this.droppedEgg.position.y,this.droppedEgg.position.z);
+  
+      if (this.droppedEgg.position.y <= this.nest.position.y+this.droppedEgg.offset.y){
+        this.droppedEgg.position.x = this.nest.position.x + this.droppedEgg.offset.x;
+        this.droppedEgg.position.y = this.nest.position.y + this.droppedEgg.offset.y;
+        this.droppedEgg.position.z = this.nest.position.z + this.droppedEgg.offset.z;
+        this.droppedEgg.velocity = {x: 0, y: 0, z: 0};
+        this.droppedEgg = null;
+      } 
+    }
+    
     this.checkForEggCollision();
     this.bird.update(t, dt);
 
     this.timePrevFrame = t;
+    
 
-    //this.checkForEggCollision();
   }
 
-  //helper function to calculate the distance
   calculateDistance(pos1, pos2) {
     const dx = pos1.x - pos2.x;
     const dy = pos1.y - pos2.y;
