@@ -18,10 +18,10 @@ export class BirdWing extends CGFobject {
     
     initParts() {
         if(this.side === "right") {
-            this.innerWing = new MyQuad(this.scene, 1, 0.5, 0, 0);
+            this.innerWing = new MyQuad(this.scene, true, 1, 0.5, 0, 0);
             this.outerWing = new MyTriangle(this.scene, 0, 0, 1, 0.5);
         } else {
-            this.innerWing = new MyQuad(this.scene, 0, 0, 1, 0.5);
+            this.innerWing = new MyQuad(this.scene, true, 0, 0, 1, 0.5);
             this.outerWing = new MyTriangle(this.scene, 0, 0, 1, 0.5);
         }
     }

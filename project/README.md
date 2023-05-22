@@ -43,6 +43,30 @@
 #### Subpoint 2 - Catching and Dropping Eggs
 - The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
 
+### Point 5 - Eggs and Nest
+#### Subpoint 1 - Object Creation
+- The nest is created using a torus (from *MyTorus* class) and a flat, one-sided circle (from *MyCircle* class). The texture coordinates for the nest's circular base were adjusted so that the square texture could be correctly drawn on the circle's surface.
+- The number of eggs in the scene is adjustable. Their positions, as well as the nest's, are randomly generated within the flat area of the terrain. For the eggs, their rotation is also randomly generated. The positions of the eggs and nest avoid overlapping by use of a mininum distance between them.
+- In theory, both the eggs and the nest are drawn right on top of the flat terrain surface ($y=-60$), however, in the case of the eggs, they may clip slightly into the terrain due to their random rotations.
+
+#### Subpoint 2 - Catching and Dropping Eggs
+- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
+
+### Point 6 - Integration of Trees
+#### Subpoint 1 - Billboard Creation
+- The normals used to determine the orientation angle of a *MyBillboard* object in order to face the camera are obtained from: 
+    1. One of the normals of the *MyQuad* object pertaining to the *MyBillboard* class. The normals of the quad are stored in a unidimensional array, so to get the relevant components ($x$ and $z$), the first and third index are accessed. Since the normals are all equal for the quad, it doesn't matter which one to take.
+    2. The normal of the camera retrived via the `calculateDirection` method of the *CGFcamera* class.
+- These vectors are represented as 2-dimensional vectors, as the only components to keep in mind are $x$ and $z$. The direction of the angle (clockwise or anti-clockwise) can be determined by getting last value of the cross product of these two vectors, whose result is a 3-dimensional vector. The value of the angle can be calculated from the dot product between the two vectors, which results in a single scalar value, that is then used as the argument of the inverse cosine function $acos$ to get a value in angle units (radians).
+- Because the quad is drawn facing the positive $z$ axis and the camera sits in the negative axis, an additional rotation of 180 degrees is necessary so that the quad faces towards the camera (otherwise it would still rotate according to the camera's direction, but it would be facing away from the camera).
+- The *MyBillboard* class doesn't hold any information about its position on the scene, since the coordinates indicating where it should be drawn are passed into the `display` method.
+
+#### Subpoint 2 - Grove of Trees
+- The amount of tree groves that appear in the scene can be customized, as well as the mininum distance between one another.
+- The groves are drawn with randomly generated positions that fit inside the flat area of the terrain, but the range of positions is different between groves. This is due to one of the grove types (*MyTreeRowPatch*) only having trees along the $x$ axis, whereas the other grove type (*MyTreeGroupPatch*) has trees spanning both $x$ and $z$ axis.
+- Because the individual trees (which are *MyBillboard* objects) don't hold information regarding their position, the grove classes need a way to define the position of each trees belonging to the grove based on the position of the grove as a whole itself. The position stored in each grove class corresponds to the coordinates of the middle point of the grove, and each tree of the grove is drawn in relation to that middle point.
+- The relative positions for each tree in the groves is defined as an array of relative base positions (eg: For the *MyTreeRowPatch* this array is defined as `[[-2, 0], [-1, 0], ..., [3, 0]]`). This allows to position each individual tree based on the coordinates of the grove. These base positions then suffer a random displacement, are scaled to space out the trees from each other, and then they're passed as the coordinates inside the `display` method for the respective tree in the grove.
+
 ## Screenshots
 | ![Screenshot 1](screenshots/project-t03g06-1.gif) |
 |:--:|
@@ -59,3 +83,7 @@
 | ![Screenshot 4](screenshots/project-t03g06-4.png) |
 |:--:|
 | *Fig. 4 - View of the terrain with the eggs and nest.* |
+
+| ![Screenshot 5](screenshots/project-t03g06-5.png) |
+|:--:|
+| *Fig. 5 - View of the flat area with tree groves drawn within.* |

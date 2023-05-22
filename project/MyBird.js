@@ -217,6 +217,8 @@ export class MyBird extends CGFobject {
             this.scene.translate(0.05,-0.7,-0.75);
             this.caughtEgg.display();
             this.scene.popMatrix();
-        }     
+        }
+
+        this.scene.popMatrix();      
     }
 }

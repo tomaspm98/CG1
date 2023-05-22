@@ -8,4 +8,9 @@ export function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1) + min);
-  }
+}
+
+export function randomChoice(choices) {
+    let index = Math.floor(Math.random() * choices.length);
+    return choices[index];
+}
