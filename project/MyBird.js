@@ -115,10 +115,9 @@ export class MyBird extends CGFobject {
             this.caughtEgg = null;
     
             // Update the dropped egg's position to the bird's current position
-            egg.position.x = this.position.x;
-            egg.position.y = this.position.y;
-            egg.position.z = this.position.z;
-    
+            egg.position.x = this.position.x+0.05;
+            egg.position.y = this.position.y-0.7;
+            egg.position.z = this.position.z-0.75;
             return egg;
         }
         return null;
@@ -170,8 +169,6 @@ export class MyBird extends CGFobject {
     
             this.scene.pushMatrix();
             this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
-            console.log(this.position.x,this.position.y,this.position.z);
-            console.log(this.caughtEgg.position.x,this.caughtEgg.position.y, this.caughtEgg.position.z);
             this.scene.translate(0.05,-0.7,-0.75);
             this.caughtEgg.display();
             this.scene.popMatrix();
