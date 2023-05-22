@@ -75,6 +75,7 @@ export class MyBird extends CGFobject {
             if (this.pickupDropState === 1) {
                 this.position.y = this.initialHeight - progress * heightDifference;
                 if (progress >= 1) {
+                    this.checkForEggCollision(this.scene.eggs,this.scene.flatAreaY); 
                     this.pickupDropState = 2;
                     this.pickupDropStartTime = t;
                 }
@@ -82,9 +83,7 @@ export class MyBird extends CGFobject {
                 this.position.y = this.groundHeight + progress * heightDifference;
                 if (progress >= 1) this.pickupDropState = 0;
             }
-        } 
-       
-
+        }
     }
 
     accelerate(v) {
@@ -105,24 +104,70 @@ export class MyBird extends CGFobject {
         if (this.pickupDropState === 0) {
             this.pickupDropState = 1;
             this.pickupDropStartTime = Date.now();
+            
         }
+    }
 
-        
- }
     dropEgg() {
         if (this.caughtEgg) {
             let egg = this.caughtEgg;
             this.caughtEgg = null;
     
             // Update the dropped egg's position to the bird's current position
-            egg.position.x = this.position.x;
-            egg.position.y = this.position.y;
-            egg.position.z = this.position.z;
-    
+            egg.position.x = this.position.x+0.05;
+            egg.position.y = this.position.y-0.7;
+            egg.position.z = this.position.z-0.75;
             return egg;
         }
         return null;
       }
+
+    droparOvo(nest, flatAreaY) {
+        if (this.caughtEgg && this.calculateDistance(this.position, nest.position) <= 8) {
+            this.droppedEgg = this.dropEgg();
+            if (this.droppedEgg) {
+                this.droppedEgg.offset = {x: (Math.random() - 0.5) * 1, y: 0, z: (Math.random() - 0.5) * 1};
+                
+                var dx = (nest.position.x + this.droppedEgg.offset.x) - this.position.x;
+                var dy = this.position.y - (nest.position.y + this.droppedEgg.offset.y);  
+                var dz = (nest.position.z + this.droppedEgg.offset.z) - this.position.z;
+                var gravity = 15;  
+                var timeToFall = Math.sqrt(2*dy/gravity);  
+        
+                this.droppedEgg.velocity = {x: dx/timeToFall, y: 0, z: dz/timeToFall}; 
+                nest.receiveEgg(this.droppedEgg);
+            }
+        }
+    }
+
+    get droppedEgg() {
+        return this._droppedEgg;
+    }
+
+    set droppedEgg(value) {
+        this._droppedEgg = value;
+    }
+
+    calculateDistance(pos1, pos2) {
+        const dx = pos1.x - pos2.x;
+        const dy = pos1.y - pos2.y;
+        const dz = pos1.z - pos2.z;
+    
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    checkForEggCollision(eggs,flatAreaY) {
+        const tolerance = 3.0;
+    
+        eggs.forEach((egg, index) => {
+            if (this.calculateDistance(this.position, egg.position) <= tolerance && this.position.y <= flatAreaY + tolerance) {
+                if (this.caughtEgg === null) {
+                    this.caughtEgg = egg;
+                    eggs.splice(index, 1);
+                }
+            }
+        });
+    }
 
     
 
@@ -167,18 +212,13 @@ export class MyBird extends CGFobject {
         this.scene.popMatrix();
         
         if (this.caughtEgg !== null) {
-    
             this.scene.pushMatrix();
             this.scene.translate(-this.caughtEgg.position.x,-this.caughtEgg.position.y,-this.caughtEgg.position.z);
-            console.log(this.position.x,this.position.y,this.position.z);
-            console.log(this.caughtEgg.position.x,this.caughtEgg.position.y, this.caughtEgg.position.z);
             this.scene.translate(0.05,-0.7,-0.75);
             this.caughtEgg.display();
             this.scene.popMatrix();
-          }
+        }
 
-        this.scene.popMatrix();
-          
-        
-}
+        this.scene.popMatrix();      
+    }
 }

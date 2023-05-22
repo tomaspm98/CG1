@@ -39,18 +39,6 @@ export class MyNest extends CGFobject {
     receiveEgg(egg) {
         this.collectedEggs.push(egg);
       }
-
-      addEgg(egg) {
-        // Calculate new position for the egg inside the nest
-        const xOffset = (Math.random() - 0.5) * 1;
-        const yOffset = 0.5;
-        const zOffset = (Math.random() - 0.5) * 1;
-        
-        egg.position.x += xOffset;
-        egg.position.y += yOffset;
-        egg.position.z += zOffset;
-        this.collectedEggs.push(egg);
-      }
       
 
     display() {

@@ -14,6 +14,7 @@ export class MyBirdEgg extends CGFobject {
         super(scene);
         this.position = pos;
         this.angles = angles;
+        this.velocity = {x:0,y:0,z:0};
         this.initialPosition = new MyPosition(pos.x, pos.y, pos.z);
         this.initParts();
         this.initMaterials();

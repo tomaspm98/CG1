@@ -70,10 +70,9 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayAxis = true;
-
+    this.droppedEgg = null;  
     this.enableTextures(true);
 
-    
     this.timePrevFrame = Date.now();
     this.setUpdatePeriod(30);
   }
@@ -151,7 +150,7 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
-  checkKeys(){
+  checkKeys() {
     var text = "Keys pressed: ";
     var keysPressed=false;
 
@@ -189,68 +188,42 @@ export class MyScene extends CGFscene {
       text += " P ";
       this.bird.pickupDropEgg();
       keysPressed = true;
-  }
-
-  if (this.gui.isKeyPressed("KeyO")) {
-    text += " O ";
-    if (this.bird.caughtEgg && this.calculateDistance(this.bird.position, this.nest.position) <= 10) {
-      const droppedEgg = this.bird.dropEgg();
-      if (droppedEgg) {
-        // Calculate new position for the egg inside the nest
-        const xOffset = this.nest.position.x + (Math.random() - 0.5) * 1;
-        const yOffset = this.nest.position.y + 0.5;
-        const zOffset = this.nest.position.z + (Math.random() - 0.5) * 1;
-  
-        droppedEgg.position.x = xOffset;
-        droppedEgg.position.y = yOffset;
-        droppedEgg.position.z = zOffset;
-  
-        this.nest.receiveEgg(droppedEgg);
-      }
     }
-    keysPressed = true;
-  }
-  
-  
 
+    if (this.gui.isKeyPressed("KeyO")) {
+      text += " O ";
+      this.bird.droparOvo(this.nest,this.flatAreaY);
+      keysPressed = true;
+    }
+  
     if (keysPressed)
       console.log(text);
   }
-
   update(t) {
     this.checkKeys();
 
     var dt = t - this.timePrevFrame;
-    this.checkForEggCollision();
+
+    var gravity = 9.8;   
+    if (this.bird.droppedEgg){
+      this.bird.droppedEgg.position.x += this.bird.droppedEgg.velocity.x * (dt/1000);
+      this.bird.droppedEgg.position.y += this.bird.droppedEgg.velocity.y * (dt/1000) - 0.5*gravity*Math.pow((dt/1000),2);
+      this.bird.droppedEgg.position.z += this.bird.droppedEgg.velocity.z * (dt/1000);
+  
+      this.bird.droppedEgg.velocity.y -= gravity * (dt/1000);
+
+      if (this.bird.droppedEgg.position.y <= this.nest.position.y+this.bird.droppedEgg.offset.y){
+        this.bird.droppedEgg.position.x = this.nest.position.x + this.bird.droppedEgg.offset.x;
+        this.bird.droppedEgg.position.y = this.nest.position.y + this.bird.droppedEgg.offset.y;
+        this.bird.droppedEgg.position.z = this.nest.position.z + this.bird.droppedEgg.offset.z;
+        this.bird.droppedEgg.velocity = {x: 0, y: 0, z: 0};
+        this.bird.droppedEgg = null;
+      } 
+    }
+    
     this.bird.update(t, dt);
-
     this.timePrevFrame = t;
-
-    //this.checkForEggCollision();
   }
-
-  //helper function to calculate the distance
-  calculateDistance(pos1, pos2) {
-    const dx = pos1.x - pos2.x;
-    const dy = pos1.y - pos2.y;
-    const dz = pos1.z - pos2.z;
-
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
-  }
-
-  checkForEggCollision() {
-    const tolerance = 3.0;
-
-    this.eggs.forEach((egg, index) => {
-        if (this.calculateDistance(this.bird.position, egg.position) <= tolerance && this.bird.position.y <= this.flatAreaY + tolerance) {
-            if (this.bird.caughtEgg === null) {
-                this.bird.caughtEgg = egg;
-                this.eggs.splice(index, 1);
-            }
-        }
-    });
-}
-
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
