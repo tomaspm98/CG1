@@ -58,7 +58,6 @@ export class MyScene extends CGFscene {
     this.droppedEgg = null;  
     this.enableTextures(true);
 
-    
     this.timePrevFrame = Date.now();
     this.setUpdatePeriod(30);
   }
@@ -104,7 +103,7 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
-  checkKeys(){
+  checkKeys() {
     var text = "Keys pressed: ";
     var keysPressed=false;
 
@@ -142,29 +141,23 @@ export class MyScene extends CGFscene {
       text += " P ";
       this.bird.pickupDropEgg();
       keysPressed = true;
-  }
+    }
 
-  if (this.gui.isKeyPressed("KeyO")) {
-    text += " O ";
-    this.bird.droparOvo(this.nest,this.flatAreaY);
-    keysPressed = true;
-  }
+    if (this.gui.isKeyPressed("KeyO")) {
+      text += " O ";
+      this.bird.droparOvo(this.nest,this.flatAreaY);
+      keysPressed = true;
+    }
   
-  
-
     if (keysPressed)
       console.log(text);
   }
-
-
   update(t) {
     this.checkKeys();
 
     var dt = t - this.timePrevFrame;
 
-    
-    var gravity = 9.8; 
-    
+    var gravity = 9.8;   
     if (this.bird.droppedEgg){
       this.bird.droppedEgg.position.x += this.bird.droppedEgg.velocity.x * (dt/1000);
       this.bird.droppedEgg.position.y += this.bird.droppedEgg.velocity.y * (dt/1000) - 0.5*gravity*Math.pow((dt/1000),2);
@@ -182,12 +175,8 @@ export class MyScene extends CGFscene {
     }
     
     this.bird.update(t, dt);
-
     this.timePrevFrame = t;
-    
-
   }
-
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
