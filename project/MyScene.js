@@ -21,11 +21,11 @@ export class MyScene extends CGFscene {
   init(application) {
     super.init(application);
     
-    this.birdStartPos = new MyPosition(40, -55, 50);
+    this.birdStartPos = new MyPosition(40, -58, 50);
     this.numEggs = 4;
     this.numTreePatches = 8;
     this.flatAreaXInt = [-15, 60];
-    this.flatAreaY = -59.8;
+    this.flatAreaY = -59.5;
     this.flatAreaZInt = [30, 75];
 
     this.treePatchTypes = {
