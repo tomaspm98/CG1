@@ -75,6 +75,7 @@ export class MyBird extends CGFobject {
             if (this.pickupDropState === 1) {
                 this.position.y = this.initialHeight - progress * heightDifference;
                 if (progress >= 1) {
+                    this.checkForEggCollision(this.scene.eggs,this.scene.flatAreaY); 
                     this.pickupDropState = 2;
                     this.pickupDropStartTime = t;
                 }
@@ -82,7 +83,8 @@ export class MyBird extends CGFobject {
                 this.position.y = this.groundHeight + progress * heightDifference;
                 if (progress >= 1) this.pickupDropState = 0;
             }
-        } 
+        }
+        
        
 
     }
@@ -105,10 +107,10 @@ export class MyBird extends CGFobject {
         if (this.pickupDropState === 0) {
             this.pickupDropState = 1;
             this.pickupDropStartTime = Date.now();
+            
         }
+    }
 
-        
- }
     dropEgg() {
         if (this.caughtEgg) {
             let egg = this.caughtEgg;
@@ -122,6 +124,53 @@ export class MyBird extends CGFobject {
         }
         return null;
       }
+
+      droparOvo(nest, flatAreaY) {
+        if (this.caughtEgg && this.calculateDistance(this.position, nest.position) <= 8) {
+          this.droppedEgg = this.dropEgg();
+          if (this.droppedEgg) {
+            this.droppedEgg.offset = {x: (Math.random() - 0.5) * 1, y: 0, z: (Math.random() - 0.5) * 1};
+            
+            var dx = (nest.position.x + this.droppedEgg.offset.x) - this.position.x;
+            var dy = this.position.y - (nest.position.y + this.droppedEgg.offset.y);  
+            var dz = (nest.position.z + this.droppedEgg.offset.z) - this.position.z;
+            var gravity = 15;  
+            var timeToFall = Math.sqrt(2*dy/gravity);  
+      
+            this.droppedEgg.velocity = {x: dx/timeToFall, y: 0, z: dz/timeToFall}; 
+            nest.receiveEgg(this.droppedEgg);
+          }
+        }
+      }
+
+      get droppedEgg(){
+        return this._droppedEgg;
+      }
+
+      set droppedEgg(value) {
+        this._droppedEgg = value;
+    }
+
+      calculateDistance(pos1, pos2) {
+        const dx = pos1.x - pos2.x;
+        const dy = pos1.y - pos2.y;
+        const dz = pos1.z - pos2.z;
+    
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+      }
+
+      checkForEggCollision(eggs,flatAreaY) {
+        const tolerance = 3.0;
+    
+        eggs.forEach((egg, index) => {
+            if (this.calculateDistance(this.position, egg.position) <= tolerance && this.position.y <= flatAreaY + tolerance) {
+                if (this.caughtEgg === null) {
+                    this.caughtEgg = egg;
+                    eggs.splice(index, 1);
+                }
+            }
+        });
+    }
 
     
 
