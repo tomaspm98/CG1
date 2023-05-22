@@ -34,6 +34,15 @@
 - In order to align the coordinates of the terrain with its color on the altimetry texture, the blue color component of the corresponding heightmap texture coordinates was inverted (because the altimetry goes from bottom to the top, however the starting point of the texture coordinates is at the top).
 - To get the flat area on both the terrain and on the heightmap, both their images were edited using the website [pixlr](https://pixlr.com/x/).
 
+### Point 5 - Eggs and Nest
+#### Subpoint 1 - Object Creation
+- The nest is created using a torus (from *MyTorus* class) and a flat, one-sided circle (from *MyCircle* class). The texture coordinates for the nest's circular base were adjusted so that the square texture could be correctly drawn on the circle's surface.
+- The number of eggs in the scene is adjustable. Their positions, as well as the nest's, are randomly generated within the flat area of the terrain. For the eggs, their rotation is also randomly generated. The positions of the eggs and nest avoid overlapping by use of a mininum distance between them.
+- In theory, both the eggs and the nest are drawn right on top of the flat terrain surface ($y=-60$), however, in the case of the eggs, they may clip slightly into the terrain due to their random rotations.
+
+#### Subpoint 2 - Catching and Dropping Eggs
+- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
+
 ### Point 6 - Integration of Trees
 #### Subpoint 1 - Billboard Creation
 - The normals used to determine the orientation angle of a *MyBillboard* object in order to face the camera are obtained from: 
@@ -48,6 +57,7 @@
 - The groves are drawn with randomly generated positions that fit inside the flat area of the terrain, but the range of positions is different between groves. This is due to one of the grove types (*MyTreeRowPatch*) only having trees along the $x$ axis, whereas the other grove type (*MyTreeGroupPatch*) has trees spanning both $x$ and $z$ axis.
 - Because the individual trees (which are *MyBillboard* objects) don't hold information regarding their position, the grove classes need a way to define the position of each trees belonging to the grove based on the position of the grove as a whole itself. The position stored in each grove class corresponds to the coordinates of the middle point of the grove, and each tree of the grove is drawn in relation to that middle point.
 - The relative positions for each tree in the groves is defined as an array of relative base positions (eg: For the *MyTreeRowPatch* this array is defined as `[[-2, 0], [-1, 0], ..., [3, 0]]`). This allows to position each individual tree based on the coordinates of the grove. These base positions then suffer a random displacement, are scaled to space out the trees from each other, and then they're passed as the coordinates inside the `display` method for the respective tree in the grove.
+
 ## Screenshots
 | ![Screenshot 1](screenshots/project-t03g06-1.gif) |
 |:--:|
@@ -60,6 +70,10 @@
 | ![Screenshot 3](screenshots/project-t03g06-3.png) |
 |:--:|
 | *Fig. 3 - Two view angles of the scene containing the bird, terrain and background.* |
+
+| ![Screenshot 4](screenshots/project-t03g06-4.png) |
+|:--:|
+| *Fig. 4 - View of the terrain with the eggs and nest.* |
 
 | ![Screenshot 5](screenshots/project-t03g06-5.png) |
 |:--:|
