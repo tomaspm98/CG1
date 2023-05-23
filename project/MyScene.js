@@ -95,7 +95,7 @@ export class MyScene extends CGFscene {
   initEggs() {
     this.eggs = new Array(this.numEggs);
     const angle = a => getRandomArbitrary(-Math.PI/2, Math.PI/2);
-    const minDist = 25;
+    const minDist = 12;
     var pos, angles;
 
     for(var i = 0; i < this.numEggs; i++) {

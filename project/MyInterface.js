@@ -25,6 +25,17 @@ export class MyInterface extends CGFinterface {
         birdFolder.add(this.scene.bird, 'scaleFactor', 0.5, 3).name('Scale Factor');
         birdFolder.add(this.scene.bird, 'speedFactor', 0.1, 3).name('Speed Factor');
 
+        var sceneFolder = this.gui.addFolder('Scene Parameters');
+        sceneFolder.add(this.scene, 'numTreePatches', 1, 25)
+                   .name('Tree Patches')
+                   .step(1)
+                   .onFinishChange(this.scene.initTrees.bind(this.scene));
+
+        sceneFolder.add(this.scene, 'numEggs', 4, 10)
+                   .name('Egg Amount')
+                   .step(1)
+                   .onFinishChange(this.scene.initEggs.bind(this.scene));
+        
         this.initKeys();
         
         return true;

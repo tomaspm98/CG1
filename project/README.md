@@ -78,3 +78,7 @@
 | ![Screenshot 5](screenshots/project-t03g06-5.png) |
 |:--:|
 | *Fig. 5 - View of the flat area with tree groves drawn within.* |
+
+| ![Screenshot 6](screenshots/project-t03g06-6.gif) |
+|:--:|
+| *Fig. 6 - Egg being dropped into the nest following a parabolic arc.* |
