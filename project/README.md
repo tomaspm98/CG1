@@ -8,6 +8,7 @@
 | Marcelo Apolinário         | 201603903 | up201603903@fe.up.pt                |
 
 ## Project Notes
+>The camera by default tracks the bird, this has the effect of locking the camera back to the bird whenever the right mouse button is pressed to move the camera target around the scene. This is intentional and the option to track the bird can be disabled in the interface inside *Camera Parameters*.
 
 ### Point 1 - Sphere
 - Initially we were having a little bit of trouble to draw the sphere, but then we realised that to draw it we would need a implementaion similar to the used to draw the cylinder. So, we reused that code and made some modifications and it was pretty inutitve doing like that.
