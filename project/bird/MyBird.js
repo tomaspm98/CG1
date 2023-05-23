@@ -21,7 +21,7 @@ export class MyBird extends CGFobject {
     }
 
     initParams() {
-        this.position = JSON.parse(JSON.stringify(this.startPosition));
+        this.position = new MyPosition(this.startPosition.x, this.startPosition.y, this.startPosition.z);
         this.orientation = 0;
 
         //Objects connected to MyInterface
@@ -60,10 +60,15 @@ export class MyBird extends CGFobject {
         // Divide 't' and 'dt' by 1000 to convert into seconds.
         // Multiply by 2*Math.PI to get a period of 1 second.
         this.dy = this.yScale * Math.sin((t/1000) * 2*Math.PI);
-        this.dWingAngle = 
-            -Math.sin(this.speedFactor * (1 + this.speed * this.speedScale) * (t/1000) * 2*Math.PI);
+        this.dWingAngle =   // Floor the speed value to reduce wing flickering when accelerating / slowing down
+            -Math.sin(this.speedFactor * (1 + Math.floor(this.speed) * this.speedScale) * (t/1000) * 2*Math.PI);
         this.position.x += this.speed * this.speedFactor * Math.sin(this.orientation) * (dt/1000);
-        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000); 
+        this.position.z += this.speed * this.speedFactor * Math.cos(this.orientation) * (dt/1000);
+        
+        // Clamp bird's position so it doesn't leave the flat area
+        this.position.x = Math.min(Math.max(this.position.x, this.scene.flatAreaXInt[0]), this.scene.flatAreaXInt[1]);
+        this.position.z = Math.min(Math.max(this.position.z, this.scene.flatAreaZInt[0]), this.scene.flatAreaZInt[1]);
+        
         if (this.pickupDropState !== 0) {
             const progress = Math.min(1, (t - this.pickupDropStartTime) / this.pickupDropTime);
             const heightDifference = this.initialHeight - this.groundHeight;
@@ -91,7 +96,7 @@ export class MyBird extends CGFobject {
     }
 
     resetBird() {
-        this.position = JSON.parse(JSON.stringify(this.startPosition));
+        this.position = new MyPosition(this.startPosition.x, this.startPosition.y, this.startPosition.z);
         this.orientation = 0;
         this.speed = 0;
     }
@@ -118,7 +123,7 @@ export class MyBird extends CGFobject {
         return null;
       }
 
-    droparOvo(nest, flatAreaY) {
+    droparOvo(nest) {
         if (this.caughtEgg && this.calculateDistance(this.position, nest.position) <= 8) {
             this.droppedEgg = this.dropEgg();
             if (this.droppedEgg) {
@@ -174,6 +179,9 @@ export class MyBird extends CGFobject {
         this.scene.translate(0.0, 0.0, -0.6);
         this.scene.rotate(this.orientation, 0, 1, 0);
         this.scene.translate(0.0, 0.0, 0.6);
+
+        this.scene.pushMatrix();
+
         this.scene.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.head.display();
@@ -206,6 +214,8 @@ export class MyBird extends CGFobject {
         this.scene.pushMatrix();
         this.tail.display();
         this.scene.popMatrix();
+    
+        this.scene.popMatrix();  
         
         if (this.caughtEgg !== null) {
             this.scene.pushMatrix();
@@ -215,6 +225,6 @@ export class MyBird extends CGFobject {
             this.scene.popMatrix();
         }
 
-        this.scene.popMatrix();      
+        this.scene.popMatrix();
     }
 }

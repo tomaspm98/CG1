@@ -2,7 +2,12 @@
 
 ## Group T03G06
 
-## Project
+| Name             | Number    | E-Mail             |
+| ---------------- | --------- | ------------------ |
+| Tomás Maciel         | 202006845 | up202006845@fe.up.pt                |
+| Marcelo Apolinário         | 201603903 | up201603903@fe.up.pt                |
+
+## Project Notes
 
 ### Point 1 - Sphere
 - Initially we were having a little bit of trouble to draw the sphere, but then we realised that to draw it we would need a implementaion similar to the used to draw the cylinder. So, we reused that code and made some modifications and it was pretty inutitve doing like that.
@@ -41,7 +46,7 @@
 - In theory, both the eggs and the nest are drawn right on top of the flat terrain surface ($y=-60$), however, in the case of the eggs, they may clip slightly into the terrain due to their random rotations.
 
 #### Subpoint 2 - Catching and Dropping Eggs
-- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
+- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc (see [Point 7](#point-7---additional-development)) towards the base of the nest.
 
 ### Point 6 - Integration of Trees
 #### Subpoint 1 - Billboard Creation
@@ -58,6 +63,8 @@
 - Because the individual trees (which are *MyBillboard* objects) don't hold information regarding their position, the grove classes need a way to define the position of each trees belonging to the grove based on the position of the grove as a whole itself. The position stored in each grove class corresponds to the coordinates of the middle point of the grove, and each tree of the grove is drawn in relation to that middle point.
 - The relative positions for each tree in the groves is defined as an array of relative base positions (eg: For the *MyTreeRowPatch* this array is defined as `[[-2, 0], [-1, 0], ..., [3, 0]]`). This allows to position each individual tree based on the coordinates of the grove. These base positions then suffer a random displacement, are scaled to space out the trees from each other, and then they're passed as the coordinates inside the `display` method for the respective tree in the grove.
 
+### Point 7 - Additional Development
+- The additional development option chosen was to make the egg drop from the bird describing a parabolic path (option A). For that effect, in the instant the key is pressed to drop the egg, the fall time of the egg is calculated using the vertical distance and gravity ($t=\sqrt{\frac{2h}{g}}$). This value is then used to model the velocity for both the $x$ and $z$ axis ($v=\frac{ds}{t}$). The egg drops with constant velocity for $x$ and $z$ and with increasing velocity for $y$ until it hits its position on the nest.
 ## Screenshots
 | ![Screenshot 1](screenshots/project-t03g06-1.gif) |
 |:--:|

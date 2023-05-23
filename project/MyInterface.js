@@ -35,7 +35,15 @@ export class MyInterface extends CGFinterface {
                    .name('Egg Amount')
                    .step(1)
                    .onFinishChange(this.scene.initEggs.bind(this.scene));
-        
+
+        sceneFolder.open();
+
+        var cameraFolder = this.gui.addFolder('Camera Parameters');
+        cameraFolder.add(this.scene.camera, 'fov', 0.5, 1.5)
+                    .name('Field of View')
+                    .step(0.1);
+                    
+        cameraFolder.add(this.scene, 'trackBird').name('Track Bird');
         this.initKeys();
         
         return true;

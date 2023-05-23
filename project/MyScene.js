@@ -38,6 +38,9 @@ export class MyScene extends CGFscene {
       new CGFtexture(this, 'images/billboardtree3.png')
     ];
 
+    this.camOffset = [5, 5, -10];
+    this.camTarget = this.birdStartPos.toVec3();
+    this.trackBird = true;
     this.initCameras();
     this.initLights();
 
@@ -82,12 +85,11 @@ export class MyScene extends CGFscene {
     this.lights[0].update();
   }
   initCameras() {
-    let camOffset = [5, 5, -10];
     this.camera = new CGFcamera(
       1.0,
       0.1,
       1000,
-      vec3.fromValues(this.birdStartPos.x + camOffset[0], this.birdStartPos.y + camOffset[1], this.birdStartPos.z + camOffset[2]),
+      vec3.fromValues(this.birdStartPos.x + this.camOffset[0], this.birdStartPos.y + this.camOffset[1], this.birdStartPos.z + this.camOffset[2]),
       this.birdStartPos.toVec3()
     );
     this.camera.zoom(-10);
@@ -149,6 +151,9 @@ export class MyScene extends CGFscene {
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
+  updateCamera() {
+    if(this.trackBird) this.camera.setTarget(this.bird.position.toVec3());
+  }
   checkKeys() {
     var text = "Keys pressed: ";
     var keysPressed=false;
@@ -196,6 +201,7 @@ export class MyScene extends CGFscene {
     }
   }
   update(t) {
+    this.updateCamera();
     this.checkKeys();
 
     var dt = t - this.timePrevFrame;
