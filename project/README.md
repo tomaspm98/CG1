@@ -43,15 +43,6 @@
 #### Subpoint 2 - Catching and Dropping Eggs
 - The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
 
-### Point 5 - Eggs and Nest
-#### Subpoint 1 - Object Creation
-- The nest is created using a torus (from *MyTorus* class) and a flat, one-sided circle (from *MyCircle* class). The texture coordinates for the nest's circular base were adjusted so that the square texture could be correctly drawn on the circle's surface.
-- The number of eggs in the scene is adjustable. Their positions, as well as the nest's, are randomly generated within the flat area of the terrain. For the eggs, their rotation is also randomly generated. The positions of the eggs and nest avoid overlapping by use of a mininum distance between them.
-- In theory, both the eggs and the nest are drawn right on top of the flat terrain surface ($y=-60$), however, in the case of the eggs, they may clip slightly into the terrain due to their random rotations.
-
-#### Subpoint 2 - Catching and Dropping Eggs
-- The bird may attempt to grab an egg at any time, but is only able to drop the egg if in the vicinity of the nest, after which the egg is dropped from the bird's feet in a parabolic arc ([Section 7]()) towards the base of the nest.
-
 ### Point 6 - Integration of Trees
 #### Subpoint 1 - Billboard Creation
 - The normals used to determine the orientation angle of a *MyBillboard* object in order to face the camera are obtained from: 
