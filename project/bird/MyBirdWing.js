@@ -1,12 +1,12 @@
 import { CGFappearance, CGFobject } from '../../lib/CGF.js';
-import { MyTriangle } from '../objects/MyTriangle.js';
-import { MyQuad } from '../objects/MyQuad.js';
+import { MyTriangle } from '../shapes/MyTriangle.js';
+import { MyQuad } from '../shapes/MyQuad.js';
 
 /**
 * BirdWing
 * @constructor
- * @param scene - Reference to MyScene object
- * @param side  - Whether it's the right or the left wing
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {String}  side  - Whether it's the right or the left wing
 */
 export class BirdWing extends CGFobject {
     constructor(scene, side) {

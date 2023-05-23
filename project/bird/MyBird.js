@@ -1,20 +1,16 @@
-import { CGFobject } from '../lib/CGF.js';
-import { MyPosition } from './MyPosition.js';
-import { BirdBody } from './bird/BirdBody.js';
-import { BirdHead } from './bird/BirdHead.js';
-import { BirdLeg } from './bird/BirdLeg.js';
-import { BirdTail } from './bird/BirdTail.js';
-import { BirdWing } from './bird/BirdWing.js';
-import { MyBirdEgg } from './bird/MyBirdEgg.js';
+import { CGFobject } from '../../lib/CGF.js';
+import { MyPosition } from '../utils/MyPosition.js';
+import { BirdBody } from './MyBirdBody.js';
+import { BirdHead } from './MyBirdHead.js';
+import { BirdLeg } from './MyBirdLeg.js';
+import { BirdTail } from './MyBirdTail.js';
+import { BirdWing } from './MyBirdWing.js';
 
-//TODO: Add claws (maybe)
-//TODO: Add textures
-//TODO: Add more materials (maybe)
 /**
 * MyBird
 * @constructor
- * @param scene     - Reference to MyScene object
- * @param start_pos - Initial bird position
+ * @param {MyScene}    scene     - Reference to MyScene object
+ * @param {MyPosition} start_pos - Initial bird position
 */
 export class MyBird extends CGFobject {
     constructor(scene, start_pos) {

@@ -1,9 +1,9 @@
 /**
  * MyPosition
  * @constructor
- * @param x - Value of x coordinate
- * @param y - Value of y coordinate
- * @param z - Value of z coordinate
+ * @param {float}   x - Value of x coordinate
+ * @param {float}   y - Value of y coordinate
+ * @param {float}   z - Value of z coordinate
  */
 export class MyPosition {
     constructor(x, y, z) {

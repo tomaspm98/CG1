@@ -2,15 +2,15 @@ import {CGFobject} from '../../lib/CGF.js';
 /**
 * MyCone
 * @constructor
- * @param scene - Reference to MyScene object
- * @param slices - number of divisions around the Y axis
- * @param stacks - number of divisions along the Y axis
- * @param totalAngle - total angle of the cone
- * @param maxS  - Maximum texture coordinate in S
- * @param maxT  - Maximum texture coordinate in T
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {int}     slices - number of divisions around the Y axis
+ * @param {int}     stacks - number of divisions along the Y axis
+ * @param {float}   totalAngle - total angle of the cone
+ * @param {float}   maxS  - Maximum texture coordinate in S
+ * @param {float}   maxT  - Maximum texture coordinate in T
 */
 export class MyCone extends CGFobject {
-    constructor(scene, slices, stacks, totalAngle, maxS=1, maxT=1) {
+    constructor(scene, slices, stacks, totalAngle, maxS=1.0, maxT=1.0) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
@@ -27,16 +27,20 @@ export class MyCone extends CGFobject {
 
         var ang = 0;
         var alphaAng = this.totalAngle/this.slices;
+        var tipHeight = Math.cos(Math.PI/4.0);
 
         for(var i = 0; i <= this.slices; i++) {
-            this.vertices.push(Math.cos(ang), 0, -Math.sin(ang));
-            this.vertices.push(Math.cos(ang), 0, -Math.sin(ang));
+            let cos_slice = Math.cos(ang);
+            let sin_slice = Math.sin(ang);
+
+            this.vertices.push(cos_slice, 0, -sin_slice);
+            this.vertices.push(cos_slice, 0, -sin_slice);
 
             this.indices.push(2*i, 2*(i+1), 2*(this.slices+1));
             this.indices.push(2*i, 2*(this.slices+1), 2*(i+1));
 
-            this.normals.push(Math.cos(ang), Math.cos(Math.PI/4.0), -Math.sin(ang));
-            this.normals.push(-Math.cos(ang), -Math.cos(Math.PI/4.0), Math.sin(ang)); 
+            this.normals.push(cos_slice, tipHeight, -sin_slice);
+            this.normals.push(-cos_slice, -tipHeight, sin_slice); 
             
             this.texCoords.push(i/this.slices * this.maxS, this.maxT);   
             this.texCoords.push(i/this.slices * this.maxS, this.maxT);
@@ -53,17 +57,4 @@ export class MyCone extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
-    /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of slices
-     */
-    updateBuffers(complexity){
-        this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
-
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
 }
-
-

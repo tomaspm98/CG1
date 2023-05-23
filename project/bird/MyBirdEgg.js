@@ -1,13 +1,13 @@
 import { CGFappearance, CGFobject } from "../../lib/CGF.js";
-import { MySphere } from "../MySphere.js";
-import { MyPosition } from "../MyPosition.js";
+import { MySphere } from "../shapes/MySphere.js";
+import { MyPosition } from "../utils/MyPosition.js";
 
 /**
 * MyBirdEgg
 * @constructor
- * @param scene     - Reference to MyScene object
- * @param pos       - Initial position
- * @param angles    - Array of angles of rotation along the x, y and z axis respectively
+ * @param {MyScene}      scene  - Reference to MyScene object
+ * @param {MyPosition}   pos    - Initial position
+ * @param {Array[float]} angles - Array of angles of rotation along the x, y and z axis respectively
 */
 export class MyBirdEgg extends CGFobject {
     constructor(scene, pos, angles) {

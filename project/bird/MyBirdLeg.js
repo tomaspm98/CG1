@@ -1,12 +1,12 @@
 import { CGFappearance, CGFobject } from "../../lib/CGF.js";
-import { MyCylinder } from '../objects/MyCylinder.js';
-import { MyDiamond } from '../objects/MyDiamond.js';
+import { MyCylinder } from '../shapes/MyCylinder.js';
+import { MyDiamond } from '../shapes/MyDiamond.js';
 
 /**
 * BirdLeg
 * @constructor
- * @param scene - Reference to MyScene object
- * @param side  - Whether it's the right or the left leg
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {String}  side  - Whether it's the right or the left leg
 */
 export class BirdLeg extends CGFobject {
     constructor(scene, side) {

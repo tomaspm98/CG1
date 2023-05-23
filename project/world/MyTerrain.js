@@ -1,10 +1,10 @@
-import { CGFappearance, CGFobject, CGFshader, CGFtexture } from "../lib/CGF.js";
-import { MyPlane } from "./MyPlane.js";
+import { CGFappearance, CGFobject, CGFshader, CGFtexture } from "../../lib/CGF.js";
+import { MyPlane } from "../shapes/MyPlane.js";
 
 /**
 * MyTerrain
 * @constructor
- * @param scene - Reference to MyScene object
+ * @param {MyScene} scene - Reference to MyScene object
 */
 export class MyTerrain extends CGFobject {
     constructor(scene) {

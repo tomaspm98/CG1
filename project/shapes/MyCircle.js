@@ -8,7 +8,7 @@ import { CGFobject } from "../../lib/CGF.js";
  * @param {float}		maxT  - Maximum texture coordinate in T
  */
 export class MyCircle extends CGFobject {
-    constructor(scene, slices, maxS=1, maxT=1) {
+    constructor(scene, slices, maxS=1.0, maxT=1.0) {
         super(scene);
         this.slices = slices;
         this.maxS = maxS;

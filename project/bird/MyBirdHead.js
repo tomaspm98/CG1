@@ -1,11 +1,11 @@
 import { CGFappearance, CGFobject } from '../../lib/CGF.js';
-import { MySphere } from '../MySphere.js';
-import { MyPyramid } from '../objects/MyPyramid.js';
+import { MySphere } from '../shapes/MySphere.js';
+import { MyPyramid } from '../shapes/MyPyramid.js';
 
 /**
 * BirdHead
 * @constructor
- * @param scene - Reference to MyScene object
+ * @param {MyScene} scene - Reference to MyScene object
 */
 export class BirdHead extends CGFobject {
     constructor(scene) {

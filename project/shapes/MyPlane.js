@@ -1,13 +1,13 @@
-import {CGFobject} from '../lib/CGF.js';
+import {CGFobject} from '../../lib/CGF.js';
 /**
 * MyPlane
 * @constructor
- * @param scene - Reference to MyScene object
- * @param nDivs - number of divisions in both directions of the surface
- * @param minS - minimum texture coordinate in S
- * @param maxS - maximum texture coordinate in S
- * @param minT - minimum texture coordinate in T
- * @param maxT - maximum texture coordinate in T
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {int}		nDivs - number of divisions in both directions of the surface
+ * @param {float}	minS - minimum texture coordinate in S
+ * @param {float}	maxS - maximum texture coordinate in S
+ * @param {float}	minT - minimum texture coordinate in T
+ * @param {float}	maxT - maximum texture coordinate in T
 */
 export class MyPlane extends CGFobject {
 	constructor(scene, nrDivs, minS, maxS, minT, maxT) {

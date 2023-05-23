@@ -4,13 +4,13 @@ import {CGFobject} from '../../lib/CGF.js';
  * @constructor
  * @param {MyScene} scene 	 - Reference to MyScene object
  * @param {boolean} backface - Include a backface
- * @param {int}		minS  	 - Mininum texture coordinate in S
- * @param {int}		minT  	 - Mininum texture coordinate in T
- * @param {int}		maxS  	 - Maximum texture coordinate in S
- * @param {int} 	maxT  	 - Maximum texture coordinate in T
+ * @param {float}	minS  	 - Mininum texture coordinate in S
+ * @param {float}	minT  	 - Mininum texture coordinate in T
+ * @param {float}	maxS  	 - Maximum texture coordinate in S
+ * @param {float} 	maxT  	 - Maximum texture coordinate in T
  */
 export class MyQuad extends CGFobject {
-	constructor(scene, backface=false, minS=0, minT=0, maxS=1, maxT=1) {
+	constructor(scene, backface=false, minS=0, minT=0, maxS=1.0, maxT=1.0) {
 		super(scene);
 		this.minS = minS;
 		this.minT = minT;

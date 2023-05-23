@@ -1,11 +1,11 @@
-import { CGFobject } from "../lib/CGF.js";
+import { CGFobject } from "../../lib/CGF.js";
 import { MyBillboard } from "./MyBillboard.js";
-import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "./utils.js";
+import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "../utils/utils.js";
 /**
  * MyTreeGroupPatch
  * @constructor
-  * @param scene - Reference to MyScene object
-  * @param position - Center position of the tree group
+  * @param {MyScene}    scene - Reference to MyScene object
+  * @param {MyPosition} position - Center position of the tree group
  */
 
 export class MyTreeGroupPatch extends CGFobject {

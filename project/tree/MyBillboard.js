@@ -1,11 +1,11 @@
-import {CGFappearance, CGFobject} from '../lib/CGF.js';
-import { MyQuad } from './objects/MyQuad.js';
+import {CGFappearance, CGFobject} from '../../lib/CGF.js';
+import { MyQuad } from '../shapes/MyQuad.js';
 /**
 * MyBillboard
 * @constructor
- * @param scene - Reference to MyScene object
- * @param texture - Tree texture to be applied
- * @param scale - Scaling values for width and height (x and y)
+ * @param {MyScene}     scene - Reference to MyScene object
+ * @param {CGFtexture}  texture - Tree texture to be applied
+ * @param {float}       scale - Scaling values for width and height (x and y)
 */
 
 export class MyBillboard extends CGFobject {

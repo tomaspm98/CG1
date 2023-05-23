@@ -2,14 +2,14 @@ import {CGFobject} from '../../lib/CGF.js';
 /**
 * MyPyramid
 * @constructor
- * @param scene - Reference to MyScene object
- * @param slices - number of divisions around the Y axis
- * @param stacks - number of divisions along the Y axis
- * @param maxS  - Maximum texture coordinate in S
- * @param maxT  - Maximum texture coordinate in T
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {int}     slices - number of divisions around the Y axis
+ * @param {int}     stacks - number of divisions along the Y axis
+ * @param {float}   maxS  - Maximum texture coordinate in S
+ * @param {float}   maxT  - Maximum texture coordinate in T
 */
 export class MyPyramid extends CGFobject {
-    constructor(scene, slices, stacks, maxS=1, maxT=1) {
+    constructor(scene, slices, stacks, maxS=1.0, maxT=1.0) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
@@ -73,18 +73,4 @@ export class MyPyramid extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
-
-    /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of slices
-     */
-    updateBuffers(complexity){
-        this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
-
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
 }
-
-

@@ -1,16 +1,18 @@
-import {CGFobject} from '../lib/CGF.js';
+import {CGFobject} from '../../lib/CGF.js';
 /**
 * MySpehere
 * @constructor
- * @param scene     - Reference to MyScene object
- * @param slices    - number of divisions around the Y axis
- * @param stacks    - number of divisions along the Y axis
- * @param inverted  - invert the surface of the sphere
- * @param maxS      - maximum texture coordinate for S
- * @param maxT      - maximum texture coordinate for T
+ * @param {MyScene} scene     - Reference to MyScene object
+ * @param {int}     slices    - number of divisions around the Y axis
+ * @param {int}     stacks    - number of divisions along the Y axis
+ * @param {boolean} inverted  - invert the surface of the sphere
+ * @param {float}   maxS      - maximum texture coordinate for S
+ * @param {float}   maxT      - maximum texture coordinate for T
+ * @param {float}   minS      - minimum texture coordinate for S
+ * @param {float}   minT      - minimum texture coordinate for T
 */
 export class MySphere extends CGFobject {
-    constructor(scene, slices, stacks, inverted=false, maxS=1, maxT=1, minS=0, minT=0) {
+    constructor(scene, slices, stacks, inverted=false, maxS=1.0, maxT=1.0, minS=0, minT=0) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
@@ -32,24 +34,30 @@ export class MySphere extends CGFobject {
 
         for (var j = 0; j <= this.stacks; j++) {
             this.angleStacks = (Math.PI/2) - (j*Math.PI/this.stacks);
+            let cos_stacks = Math.cos(this.angleStacks);
+            let sin_stacks = Math.sin(this.angleStacks);
+
             for (var i = 0; i <= this.slices; i++) {
+                let cos_slice = Math.cos(i*this.angleSlices)*cos_stacks;
+                let sin_slice = Math.sin(i*this.angleSlices)*cos_stacks;
+                
                 this.vertices.push(
-                    Math.cos(i*this.angleSlices)*Math.cos(this.angleStacks),
-                    Math.sin(i*this.angleSlices)*Math.cos(this.angleStacks),
-                    Math.sin(this.angleStacks)
+                    cos_slice,
+                    sin_slice,
+                    sin_stacks
                 );
                 
                 if(!this.inverted)
                     this.normals.push(
-                        Math.cos(i*this.angleSlices)*Math.cos(this.angleStacks),
-                        Math.sin(i*this.angleSlices)*Math.cos(this.angleStacks),
-                        Math.sin(this.angleStacks)
+                        cos_slice,
+                        sin_slice,
+                        sin_stacks
                     );
                 else
                     this.normals.push(
-                        -Math.cos(i*this.angleSlices)*Math.cos(this.angleStacks),
-                        -Math.sin(i*this.angleSlices)*Math.cos(this.angleStacks),
-                        -Math.sin(this.angleStacks)
+                        -cos_slice,
+                        -sin_slice,
+                        -sin_stacks
                     );  
 
                 this.texCoords.push(this.minS + i/this.slices * this.maxS);

@@ -2,14 +2,14 @@ import {CGFobject} from '../../lib/CGF.js';
 /**
 * MyCylinder
 * @constructor
- * @param scene - Reference to MyScene object
- * @param slices - number of divisions around the Y axis
- * @param stacks - number of divisions along the Y axis
- * @param maxS  - Maximum texture coordinate in S
- * @param maxT  - Maximum texture coordinate in T
+ * @param {MyScene} scene - Reference to MyScene object
+ * @param {int}     slices - number of divisions around the Y axis
+ * @param {int}     stacks - number of divisions along the Y axis
+ * @param {float}   maxS  - Maximum texture coordinate in S
+ * @param {float}   maxT  - Maximum texture coordinate in T
 */
 export class MyCylinder extends CGFobject {
-    constructor(scene, slices, stacks, maxS=1, maxT=1) {
+    constructor(scene, slices, stacks, maxS=1.0, maxT=1.0) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
@@ -27,11 +27,17 @@ export class MyCylinder extends CGFobject {
         this.angle = Math.PI*2/this.slices;
         
         for (var j = 0; j <= this.stacks; j++) {
+            let t = j/this.stacks;
+
             for (var i = 0; i <= this.slices; i++) {
-            this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j/this.stacks);
-            this.normals.push(Math.cos(i*this.angle),Math.sin(i*this.angle),0);
-            this.texCoords.push(i/this.slices * this.maxS);
-            this.texCoords.push(j/this.stacks * this.maxT);
+                let s = i/this.slices;
+                let cos_slice = Math.cos(i*this.angle);
+                let sin_slice = Math.sin(i*this.angle);
+
+                this.vertices.push(cos_slice, sin_slice, t);
+                this.normals.push(cos_slice, sin_slice, 0);
+                this.texCoords.push(s * this.maxS);
+                this.texCoords.push(t * this.maxT);
             }
         }
     
@@ -46,4 +52,3 @@ export class MyCylinder extends CGFobject {
         this.initGLBuffers();
     }
 }
-   

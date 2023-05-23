@@ -1,12 +1,12 @@
 import { CGFappearance, CGFobject } from "../../lib/CGF.js";
-import { MyCircle } from "../objects/MyCircle.js";
-import { MyTorus } from "../objects/MyTorus.js";
+import { MyCircle } from "../shapes/MyCircle.js";
+import { MyTorus } from "../shapes/MyTorus.js";
 
 /**
 * MyNest
 * @constructor
- * @param scene     - Reference to MyScene object
- * @param pos       - Initial position
+ * @param {MyScene}    scene - Reference to MyScene object
+ * @param {MyPosition} pos   - Initial position
 */
 export class MyNest extends CGFobject {
     constructor(scene, pos) {

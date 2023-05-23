@@ -1,14 +1,13 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from "../lib/CGF.js";
-import { MyBillboard } from "./MyBillboard.js";
-import { MyBird } from "./MyBird.js";
-import { MyPanorama } from "./MyPanorama.js";
-import { MyPosition } from "./MyPosition.js";
-import { MyTerrain } from "./MyTerrain.js";
+import { MyBird } from "./bird/MyBird.js";
+import { MyPanorama } from "./world/MyPanorama.js";
+import { MyPosition } from "./utils/MyPosition.js";
+import { MyTerrain } from "./world/MyTerrain.js";
 import { MyBirdEgg } from "./bird/MyBirdEgg.js";
 import { MyNest } from "./bird/MyNest.js";
-import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "./utils.js";
-import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
-import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
+import { getRandomArbitrary, getRandomIntInclusive, randomChoice } from "./utils/utils.js";
+import { MyTreeGroupPatch } from "./tree/MyTreeGroupPatch.js";
+import { MyTreeRowPatch } from "./tree/MyTreeRowPatch.js";
 
 /**
  * MyScene
@@ -195,9 +194,6 @@ export class MyScene extends CGFscene {
       this.bird.droparOvo(this.nest,this.flatAreaY);
       keysPressed = true;
     }
-  
-    if (keysPressed)
-      console.log(text);
   }
   update(t) {
     this.checkKeys();

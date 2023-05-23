@@ -1,10 +1,10 @@
 import { CGFappearance, CGFobject} from '../../lib/CGF.js';
-import { MyCone } from '../objects/MyCone.js';
+import { MyCone } from '../shapes/MyCone.js';
 
 /**
 * BirdTail
 * @constructor
- * @param scene - Reference to MyScene object
+ * @param {MyScene} scene - Reference to MyScene object
 */
 export class BirdTail extends CGFobject {
     constructor(scene) {
